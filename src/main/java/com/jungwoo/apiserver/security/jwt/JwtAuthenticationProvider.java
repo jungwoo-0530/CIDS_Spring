@@ -27,7 +27,7 @@ public class JwtAuthenticationProvider {
 
   private final UserDetailsService userDetailsService;
 
-  @Value(("${security.jwt.token.secretKey}"))
+  @Value("${security.jwt.token.secretKey}")
   private String secretKey;
   @Value("${security.jwt.token.expire}")
   private Long tokenExpired;

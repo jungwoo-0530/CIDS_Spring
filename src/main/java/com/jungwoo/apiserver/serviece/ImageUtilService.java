@@ -79,12 +79,18 @@ public class ImageUtilService {
   }
 
   public String makeDirWithBoardId(Board board) {
-    String path = "/Users/jungwoo/Desktop/dev/SpringBootApiServer/frontend/public/img/boardImage/";
+    String path = "/Users/jungwoo/Desktop/img/";
     path = path + board.getId();
 
     File folder = new File(path);
-
-    folder.mkdir();
+    if(!folder.exists()){
+      boolean result = folder.mkdir();
+      if(result){
+        log.info("디렉토리 생성");
+      }else{
+        log.info("디렉토리 생성 실패");
+      }
+    }
 
     return path;
   }

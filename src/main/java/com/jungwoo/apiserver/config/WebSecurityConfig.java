@@ -62,11 +62,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .regexMatchers(HttpMethod.GET, "\\/boards\\?boardType=(&.*|$)").permitAll()// /boards?boardType=qna&page=0 ...
 
         //comment
-//        .antMatchers(HttpMethod.PUT, "/comments/{boardId}").authenticated()
-//        .antMatchers(HttpMethod.GET, "/comments").permitAll()
+        .antMatchers(HttpMethod.PUT, "/comments/{boardId}").authenticated()
+        .antMatchers(HttpMethod.GET, "/comments").authenticated()
         .antMatchers(HttpMethod.POST, "/comments").authenticated()
         .antMatchers("/register","/login").permitAll()
         .antMatchers(HttpMethod.PUT, "/members/{memberId}").authenticated()
+
+        //member
+        .antMatchers(HttpMethod.POST, "/login").permitAll()
+        .antMatchers(HttpMethod.GET, "/members/me").authenticated()
+        .antMatchers(HttpMethod.PUT, "/members/me/update").authenticated()
+        .antMatchers(HttpMethod.GET, "/members").authenticated()
+        .antMatchers(HttpMethod.GET, "/members/search").hasRole("admin")
+        .antMatchers(HttpMethod.PUT, "/members/{memberId}").hasRole("admin")
+
+        //Detect
+        .antMatchers(HttpMethod.POST, "/detect").authenticated()
+
         .and()
         .formLogin().disable()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

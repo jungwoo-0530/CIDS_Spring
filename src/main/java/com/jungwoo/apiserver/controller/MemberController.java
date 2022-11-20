@@ -2,10 +2,10 @@ package com.jungwoo.apiserver.controller;
 
 import com.jungwoo.apiserver.dto.BasicResponse;
 import com.jungwoo.apiserver.dto.CommonResponse;
-import com.jungwoo.apiserver.dto.ErrorResponse;
-import com.jungwoo.apiserver.dto.maria.member.CreateMemberRequest;
+import com.jungwoo.apiserver.dto.maria.member.MemberCreateDto;
 import com.jungwoo.apiserver.domain.maria.Member;
 import com.jungwoo.apiserver.dto.maria.member.MemberPageDto;
+import com.jungwoo.apiserver.exception.validation.ValidationSequence;
 import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
 import com.jungwoo.apiserver.serviece.MemberService;
 import io.swagger.annotations.Api;
@@ -19,11 +19,12 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
-import java.util.Optional;
 
 /**
  * fileName     : MemberController
@@ -42,7 +43,7 @@ public class MemberController {
 
   @ApiOperation(value = "회원가입하는 메소드")
   @PostMapping("/register")
-  public ResponseEntity<? extends BasicResponse> registerMember(@RequestBody CreateMemberRequest createMemberRequest) {
+  public ResponseEntity<? extends BasicResponse> registerMember(@Validated(value = ValidationSequence.class) @RequestBody MemberCreateDto createMemberRequest) {
 
 
 
@@ -63,7 +64,7 @@ public class MemberController {
 
   @ApiOperation(value = "로그인하는 메소드")
   @PostMapping("/login")
-  public ResponseEntity<? extends BasicResponse> login(@RequestBody loginRequest loginReq) {
+  public ResponseEntity<? extends BasicResponse> login(@Validated @RequestBody loginRequest loginReq) {
 
     Member member = memberService.findByLoginId(loginReq.getLoginId());
 
@@ -90,7 +91,9 @@ public class MemberController {
   @Builder
   public static class loginRequest {
 
+    @NotBlank(message = "로그인ID는 필수입니다.")
     private String loginId;
+    @NotBlank(message = "비밀번호는 필수입니다.")
     private String password;
   }
 

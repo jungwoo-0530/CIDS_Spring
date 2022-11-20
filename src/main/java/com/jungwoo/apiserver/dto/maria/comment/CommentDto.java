@@ -6,6 +6,8 @@ import com.jungwoo.apiserver.domain.maria.Member;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+
 /**
  * fileName     : CommentDto
  * author       : jungwoo
@@ -16,6 +18,7 @@ import lombok.Data;
 public class CommentDto {
 
   private Long id;
+  @NotBlank(message = "내용은 필수입니다.")
   private String content;
   private Long boardId;
   private Long parentId;

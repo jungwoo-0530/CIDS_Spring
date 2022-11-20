@@ -53,7 +53,7 @@ public class ImageUtilController {
     String userId = jwtAuthenticationProvider.getUserPk(
         jwtAuthenticationProvider.getTokenInRequestHeader(multipartReq, "Bearer"));
 
-    String TempImageAbsolutePath = "/Users/jungwoo/Desktop/dev/SpringBootApiServer/frontend/public/img/tempImage/";
+    String TempImageAbsolutePath = "/Users/jungwoo/Desktop/img/";
 
     String fileOriginalName = file.getOriginalFilename();
     UUID uu = UUID.randomUUID();

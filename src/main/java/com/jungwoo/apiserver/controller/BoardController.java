@@ -3,8 +3,10 @@ package com.jungwoo.apiserver.controller;
 import com.jungwoo.apiserver.domain.maria.Board;
 import com.jungwoo.apiserver.domain.maria.Member;
 import com.jungwoo.apiserver.dto.*;
+import com.jungwoo.apiserver.dto.maria.board.BoardCreateDto;
 import com.jungwoo.apiserver.dto.maria.board.BoardPageDto;
 import com.jungwoo.apiserver.dto.maria.board.BoardSearchCondition;
+import com.jungwoo.apiserver.dto.maria.board.BoardUpdateDto;
 import com.jungwoo.apiserver.exception.BoardErrorCode;
 import com.jungwoo.apiserver.exception.CustomException;
 import com.jungwoo.apiserver.serviece.ImageUtilService;
@@ -24,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,7 +46,6 @@ public class BoardController {
 
   private final BoardService boardService;
   private final MemberService memberService;
-  private final ImageUtilService imageUtilService;
 
   @ApiOperation(value = "카테고리에 맞는 게시글 목록을 반환하는 메소드")
   @ApiImplicitParam(name = "type", value = "게시글 카테고리", dataType = "String")
@@ -111,27 +113,22 @@ public class BoardController {
   @ApiOperation(value = "게시글을 생성하는 메소드")
   @ApiImplicitParam(name = "boardType", value = "게시글 카테고리")
   @PostMapping("/boards")
-  public ResponseEntity<? extends BasicResponse> createBoard(@RequestBody BoardDto boardDto,
+  public ResponseEntity<? extends BasicResponse> createBoard(@RequestBody BoardCreateDto boardCreateDto,
                                                              HttpServletRequest request) throws IOException {
 
     Member member = memberService.getMemberByRequestJwt(request);
 
     Board board = Board.builder().
-        title(boardDto.title).
-        content(boardDto.content).
+        title(boardCreateDto.getTitle()).
+        content(boardCreateDto.getContent()).
         member(member).
-        type(boardDto.type).
+        type(boardCreateDto.getType()).
         hit(1).
         available(true).
         build();
 
 
-    Long id = null;
-    try {
-      id = boardService.saveBoard(board);
-    } catch (IOException e) {
-      throw new CustomException(BoardErrorCode.POST_SAVE_FAILED);
-    }
+    Long id = boardService.saveBoard(board);
 
     return ResponseEntity.status(201).body(new CommonResponse<>(id, "게시물을 생성했습니다."));
   }
@@ -150,7 +147,7 @@ public class BoardController {
 
   @PutMapping("/boards/{boardId}")
   public ResponseEntity<? extends BasicResponse> updateBoard(@PathVariable(name = "boardId") Long boardId,
-                                                             @RequestBody BoardDto boardDto,
+                                                            @Validated @RequestBody BoardUpdateDto boardUpdateDto,
                                                              HttpServletRequest request) {
 
     log.info("BoardController updateBoard");
@@ -158,8 +155,8 @@ public class BoardController {
 
     Board newBoard = Board.builder().
         id(boardId).
-        title(boardDto.getTitle()).
-        content(boardDto.getContent()).build();
+        title(boardUpdateDto.getTitle()).
+        content(boardUpdateDto.getContent()).build();
 
 
     boardService.updateBoard(newBoard, request);

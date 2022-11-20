@@ -24,6 +24,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
                        AuthenticationException authException) throws IOException {
 
 //    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "토큰 인증 실패");
-    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED, "토큰 인증 실패");
+    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인이 필요합니다.");
   }
 }

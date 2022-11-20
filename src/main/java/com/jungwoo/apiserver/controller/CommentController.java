@@ -5,6 +5,7 @@ import com.jungwoo.apiserver.domain.maria.Comment;
 import com.jungwoo.apiserver.domain.maria.Member;
 import com.jungwoo.apiserver.dto.BasicResponse;
 import com.jungwoo.apiserver.dto.CommonResponse;
+import com.jungwoo.apiserver.dto.maria.comment.CommentCreateDto;
 import com.jungwoo.apiserver.dto.maria.comment.CommentDto;
 import com.jungwoo.apiserver.dto.maria.comment.CommentPageDto;
 import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
@@ -19,9 +20,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotBlank;
 
 /**
  * fileName     : CommentController
@@ -36,7 +39,6 @@ public class CommentController {
   private final CommentService commentService;
   private final MemberService memberService;
   private final BoardService boardService;
-  private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
 
   @ApiOperation(value = "게시글 하나에 존재하는 댓글 리스트")
@@ -47,7 +49,6 @@ public class CommentController {
                                           HttpServletRequest request) {
 
 
-    log.info("{}", boardId);
 
     Member member = memberService.getMemberByRequestJwt(request);
 
@@ -61,7 +62,7 @@ public class CommentController {
   //CommentForm에서 사용되는 변수
   //BoardId, Content, parentId,
   @PostMapping("/comments")
-  public ResponseEntity<? extends BasicResponse> createComment(@RequestBody CommentDto commentDto,
+  public ResponseEntity<? extends BasicResponse> createComment(@Validated @RequestBody CommentCreateDto commentCreateDto,
                                                                HttpServletRequest request) {
 
 
@@ -69,23 +70,23 @@ public class CommentController {
     Member member = memberService.getMemberByRequestJwt(request);
 
     //2차 쿼리
-    Board board = boardService.getBoardById(commentDto.getBoardId());
+    Board board = boardService.getBoardById(commentCreateDto.getBoardId());
 
 
 
-    if (commentDto.getParentId() == null) {
+    if (commentCreateDto.getParentId() == null) {
       Comment newComment = Comment.builder()
-          .content(commentDto.getContent())
+          .content(commentCreateDto.getContent())
           .member(member)
           .board(board).build();
 
       commentService.saveHierarchyCommentAndOrders(newComment);
     } else {
       //3차쿼리
-      Comment parentComment = commentService.findCommentById(commentDto.getParentId());
+      Comment parentComment = commentService.findCommentById(commentCreateDto.getParentId());
 
       Comment newComment = Comment.builder()
-          .content(commentDto.getContent())
+          .content(commentCreateDto.getContent())
           .parentComment(parentComment)
           .member(member)
           .board(board).build();
@@ -99,7 +100,7 @@ public class CommentController {
 
   @PutMapping("/comments/{commentId}")
   public ResponseEntity<? extends BasicResponse> updateComment(@PathVariable(name = "commentId") Long commentId,
-                                                               @RequestBody CommentDto commentDto) {
+                                                               @Validated @RequestBody CommentDto commentDto) {
     Comment comment = Comment.builder().
         id(commentId).
         content(commentDto.getContent()).build();
@@ -110,7 +111,7 @@ public class CommentController {
   }
 
   @DeleteMapping("/comments/{commentId}")
-  public ResponseEntity<? extends BasicResponse> deleteComment(@PathVariable(name = "commentId") Long commentId) {
+  public ResponseEntity<? extends BasicResponse> deleteComment(@NotBlank @PathVariable(name = "commentId") Long commentId) {
 
     commentService.softDeleteComment(commentId);
 

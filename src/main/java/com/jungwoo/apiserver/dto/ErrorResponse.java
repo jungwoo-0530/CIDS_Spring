@@ -22,6 +22,8 @@ public class ErrorResponse extends BasicResponse{
   private final String code;
   private final String error;
   private final int status;
+
+
   private final LocalDateTime timestamp = LocalDateTime.now();
 
   public ErrorResponse(ErrorCode errorCode) {

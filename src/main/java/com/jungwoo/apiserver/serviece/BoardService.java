@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
@@ -31,7 +32,7 @@ public class BoardService {
   private final MemberService memberService;
   private final ImageUtilService imageUtilService;
 
-  //db초기화용.
+
 
 
   @Transactional(readOnly = true)
@@ -43,9 +44,14 @@ public class BoardService {
   @Transactional
   public Long saveBoard(Board board) throws IOException {
 
-    boardRepository.save(board);
+    try {
+      boardRepository.save(board);
 
-    imageUtilService.permanentSaveImage(board.getMember().getLoginId(), board);
+      imageUtilService.permanentSaveImage(board.getMember().getLoginId(), board);
+
+    } catch (IOException e) {
+      throw new CustomException(BoardErrorCode.POST_SAVE_FAILED);
+    }
 
 
     return board.getId();

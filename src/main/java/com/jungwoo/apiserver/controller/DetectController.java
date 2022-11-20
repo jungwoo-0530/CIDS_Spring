@@ -9,6 +9,7 @@ import com.jungwoo.apiserver.serviece.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -31,8 +32,8 @@ public class DetectController {
 
 
   @PostMapping("/detect")
-  public ResponseEntity<? extends BasicResponse> testSearch(@RequestBody DetectDto detectDto,
-                                                            HttpServletRequest request) throws IOException, MessagingException {
+  public ResponseEntity<? extends BasicResponse> searchService(@Validated @RequestBody DetectDto detectDto,
+                                                               HttpServletRequest request) throws IOException, MessagingException {
 
     Member member = memberService.getMemberByRequestJwt(request);
 
