@@ -23,17 +23,9 @@ public class QObjectId extends BeanPath<ObjectId> {
 
     public final DateTimePath<java.util.Date> date = createDateTime("date", java.util.Date.class);
 
-    public final NumberPath<Integer> machineIdentifier = createNumber("machineIdentifier", Integer.class);
-
-    public final NumberPath<Short> processIdentifier = createNumber("processIdentifier", Short.class);
-
     public final NumberPath<Integer> randomValue1 = createNumber("randomValue1", Integer.class);
 
     public final NumberPath<Short> randomValue2 = createNumber("randomValue2", Short.class);
-
-    public final NumberPath<Long> time = createNumber("time", Long.class);
-
-    public final NumberPath<Integer> timeSecond = createNumber("timeSecond", Integer.class);
 
     public final NumberPath<Integer> timestamp = createNumber("timestamp", Integer.class);
 

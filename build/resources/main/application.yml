@@ -1,18 +1,114 @@
+#default 공통 설정
+#dev : 각 개별 개발자들이 만든 코드를 합쳐서 서버 환경에서 테스트해볼 수 있는 환경
+#Prod(Production) : 실제 서비스를 위한 운영 환경
 spring:
+  profiles:
+    group:
+      "local": "local, common"
+      "prod": "prod, common"
+---
+
+spring:
+  config:
+    activate:
+      on-profile: common
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
 
-#  datasource:
-#    driver-class-name: org.mariadb.jdbc.Driver
-#    url: jdbc:mysql://127.0.0.1:3306/apiserver
-#    username: root
-#    password: root
-#    hikari:
-#      idle-timeout: 10000
-#      maximum-pool-size: 10
-#      minimum-idle: 5
-#      pool-name: MariaHikariPool
+
+  jpa:
+
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: dbxbqmabwlr73@gmail.com
+    password: xvnqmgoivrfitxcg
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
+security:
+  jwt:
+    token:
+      secretKey: secretkey
+      expire: 3600000
+#      expire: 60000//1분
+#      expire: 1800000//30분
+
+logging:
+  level:
+    com.zaxxer.hikari: TRACE
+    com.zaxxer.hikari.HikariConfig: DEBUG
+
+email:
+  subject: "CIDS 저작권 침해 의심 탐지의 결과입니다."
+  text: "저희 CIDS 서비스를 이용해주셔서 감사합니다.\n\n
+        고객님이 요청하신 Keyword 기반으로 저작권 침해 의심 사이트 리스트를 추출했습니다.\n\n
+        만약 warninglist.csv가 비어있다면, 요청 키워드로 저작권 침해 의심 사이트가 탐지되지 않았습니다.\n\n
+        해당 키워드에 다시보기 또는 무료(보기)를 붙혀서 재시도 해보세요.\n\n
+        읽어주셔서 감사합니다. 😊\n\n
+        - CIDS TEAM 드림 -\n\n
+        COPY112 : https://www.copy112.or.kr/ \n\n"
+
+python:
+  flask:
+    url: "http://localhost:9900"
+
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/apiserver
+    username: root
+    password: root
+    hikari:
+      idle-timeout: 10000
+      maximum-pool-size: 10
+      minimum-idle: 5
+      pool-name: MariaHikariPool
+
+  data:
+    mongodb:
+      #local mongodb
+          uri: mongodb://localhost:27017/cids_db
+
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+      location: /Users/jungwoo/Desktop/AWS_CIDS/img/
+      file-size-threshold: 1MB
+
+  front:
+    uri: http://localhost:3000
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
 
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
@@ -27,81 +123,15 @@ spring:
 
   data:
     mongodb:
-#        driver-class-name: mongodb.jdbc.MongoDriver
-#        driver-class-name: org.MongoDriver.Driver
-      #local mongodb
-#      uri: mongodb://localhost:27017/cids_db
-      uri: mongodb://test:test@15.164.220.56:27017/cids_db?authSource=admin&authMechanism=SCRAM-SHA-1
-  #      host: 127.0.0.1
-#      port: 27017
-#      database: cids_db
-#      authenticationDatabase: admin
-
-  jpa:
-
-    show-sql: true
-#    open-in-view: true
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-#        dialect_maria: org.hibernate.dialect.MariaDB106Dialect
-        format_sql: true
-#    database: default
-  #        show_sql: true
+      uri: mongodb://test:test@13.209.70.91:27017/cids_db?authSource=admin&authMechanism=SCRAM-SHA-1
 
 
   servlet:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
-      location: /Users/jungwoo/Desktop/dev/SpringBootApiServer/backend/src/main/resources/img
       file-size-threshold: 1MB
+      #location: s3위치.
 
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: dbxbqmabwlr73@gmail.com
-    password: xvnqmgoivrfitxcg
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-#  autoconfigure:
-#    exclude: {org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,XADataSourceAutoConfiguration.class}
-
-
-
-#logging.level:
-#  org.hibernate.type: trace
-
-security:
-  jwt:
-    token:
-      secretKey: secretkey
-      expire: 3600000
-#      expire: 60000//1분
-#      expire: 1800000//30분
-
-
-email:
-  subject: "CIDS 저작권 침해 의심 탐지의 결과입니다."
-  text: "저희 CIDS 서비스를 이용해주셔서 감사합니다.\n\n
-        고객님이 요청하신 Keyword 기반으로 저작권 침해 의심 사이트 리스트를 추출했습니다.\n\n
-        만약 warninglist.csv가 비어있다면, 요청 키워드로 저작권 침해 의심 사이트가 탐지되지 않았습니다.\n\n
-        해당 키워드에 다시보기 또는 무료(보기)를 붙혀서 재시도 해보세요.\n\n
-        읽어주셔서 감사합니다. 😊\n\n
-        - CIDS TEAM 드림 -\n\n
-        COPY112 : https://www.copy112.or.kr/ \n\n"
-
-python:
-  flask:
-    url: "http://127.0.0.1:9900"
-
-
-logging:
-  level:
-    com.zaxxer.hikari: TRACE
-    com.zaxxer.hikari.HikariConfig: DEBUG
+  front:
+    uri: http://3.35.21.212:3000
