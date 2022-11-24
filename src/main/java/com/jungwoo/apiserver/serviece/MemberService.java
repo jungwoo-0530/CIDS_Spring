@@ -1,7 +1,9 @@
 package com.jungwoo.apiserver.serviece;
 
 import com.jungwoo.apiserver.domain.maria.Member;
+import com.jungwoo.apiserver.dto.maria.member.MemberCreateDto;
 import com.jungwoo.apiserver.dto.maria.member.MemberPageDto;
+import com.jungwoo.apiserver.dto.maria.member.MemberUpdateDto;
 import com.jungwoo.apiserver.exception.CustomException;
 import com.jungwoo.apiserver.exception.MemberErrorCode;
 import com.jungwoo.apiserver.repository.maria.MemberRepository;
@@ -15,8 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+
 /**
  * fileName     : MemberService
  * author       : jungwoo
@@ -40,22 +41,33 @@ public class MemberService {
   }
 
   @Transactional
-  public Long save(Member member) {
+  public Long save(MemberCreateDto memberCreateDto) {
 
     //Id중복검사
-    if(dupLoginIdCheck(member.getLoginId())){
+    if(dupLoginIdCheck(memberCreateDto.getLoginId())){
       throw new CustomException(MemberErrorCode.MEMBER_LOGINID_DUPLICATION);
     }
 
     //이메일 중복검사
-    if(dupEmailCheck(member.getEmail())){
+    if(dupEmailCheck(memberCreateDto.getEmail())){
       throw new CustomException(MemberErrorCode.MEMBER_EMAIL_DUPLICATION);
     }
 
-    String encodedPassword = passwordEncoder.encode(member.getPassword());
-    member.setPassword(encodedPassword);
-    memberRepository.save(member);
-    return member.getId();
+
+
+    String encodedPassword = passwordEncoder.encode(memberCreateDto.getPassword());
+
+    Member newMember = Member.builder().
+        name(memberCreateDto.getName()).
+        loginId(memberCreateDto.getLoginId()).
+        email(memberCreateDto.getEmail()).
+        password(encodedPassword).
+        telephone(memberCreateDto.getTelephone()).
+        role("MEMBER").build();
+
+    memberRepository.save(newMember);
+
+    return newMember.getId();
 
   }
 
@@ -70,9 +82,9 @@ public class MemberService {
   }
 
   @Transactional
-  public void updateMember(Member member) {
-    Member findMember = memberRepository.findByLoginId(member.getLoginId()).orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
-    findMember.change(member.getName(), member.getTelephone());
+  public void updateMember(Member member, MemberUpdateDto memberUpdateDto) {
+
+    member.changeTelephoneAndEmail(memberUpdateDto.getEmail(), memberUpdateDto.getTelephone());
   }
 
   @Transactional
@@ -97,7 +109,7 @@ public class MemberService {
     return memberRepository.findAllPageSortBySearch(pageable, searchWord);
   }
 
-  public void loginIdMatches(String requestPassword, String password) {
+  public void loginPasswordMatches(String requestPassword, String password) {
     if(!passwordEncoder.matches(requestPassword, password)){
       throw new CustomException(MemberErrorCode.MEMBER_PASSWORD_NOT_MATCH);
     }
@@ -106,5 +118,11 @@ public class MemberService {
   @Transactional(readOnly = true)
   public Member getMemberByMultiPartRequestJwt(MultipartHttpServletRequest request) {
     return memberRepository.findByLoginId(jwtAuthenticationProvider.getUserPk(jwtAuthenticationProvider.getTokenInRequestHeader(request, "Bearer"))).orElseThrow(()->new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
+  }
+
+  public void updatePassword(Member member, String newPassword) {
+    String encodedPassword = passwordEncoder.encode(newPassword);
+
+    member.changePassword(encodedPassword);
   }
 }

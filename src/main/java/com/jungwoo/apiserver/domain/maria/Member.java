@@ -31,8 +31,8 @@ public class Member extends BaseTimeEntity {
 
   private String imgUri;
 
-  public void change(String name, String telephone){
-    this.password = name;
+  public void changeTelephoneAndEmail(String email, String telephone){
+    this.email = email;
     this.telephone = telephone;
   }
 

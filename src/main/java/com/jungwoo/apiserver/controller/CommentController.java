@@ -12,6 +12,7 @@ import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
 import com.jungwoo.apiserver.serviece.BoardService;
 import com.jungwoo.apiserver.serviece.CommentService;
 import com.jungwoo.apiserver.serviece.MemberService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,7 @@ import javax.validation.constraints.NotBlank;
  * author       : jungwoo
  * description  :
  */
+@Api(tags = "댓글 API Controller")
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -60,20 +62,19 @@ public class CommentController {
 
 
   //CommentForm에서 사용되는 변수
-  //BoardId, Content, parentId,
+  //BoardId, Content, parentId
+
+  @ApiOperation(value = "댓글 생성")
   @PostMapping("/comments")
   public ResponseEntity<? extends BasicResponse> createComment(@Validated @RequestBody CommentCreateDto commentCreateDto,
                                                                HttpServletRequest request) {
-
 
     //1차 쿼리
     Member member = memberService.getMemberByRequestJwt(request);
 
     //2차 쿼리
     Board board = boardService.getBoardById(commentCreateDto.getBoardId());
-
-
-
+    //루트 댓글은 parentComment가 null.
     if (commentCreateDto.getParentId() == null) {
       Comment newComment = Comment.builder()
           .content(commentCreateDto.getContent())
@@ -98,6 +99,7 @@ public class CommentController {
 
   }
 
+  @ApiOperation(value = "댓글 수정(업데이트)")
   @PutMapping("/comments/{commentId}")
   public ResponseEntity<? extends BasicResponse> updateComment(@PathVariable(name = "commentId") Long commentId,
                                                                @Validated @RequestBody CommentDto commentDto) {
@@ -110,6 +112,7 @@ public class CommentController {
     return ResponseEntity.ok().body(new CommonResponse<>("댓글을 수정했습니다."));
   }
 
+  @ApiOperation(value = "댓글 삭제")
   @DeleteMapping("/comments/{commentId}")
   public ResponseEntity<? extends BasicResponse> deleteComment(@NotBlank @PathVariable(name = "commentId") Long commentId) {
 

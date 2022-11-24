@@ -76,6 +76,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers(HttpMethod.GET, "/members").authenticated()
         .antMatchers(HttpMethod.GET, "/members/search").hasRole("admin")
         .antMatchers(HttpMethod.PUT, "/members/{memberId}").hasRole("admin")
+        .antMatchers(HttpMethod.PUT, "/members/me/password").authenticated()
+        .antMatchers(HttpMethod.POST, "/members/image").authenticated()
 
         //Detect
         .antMatchers(HttpMethod.POST, "/detect").authenticated()

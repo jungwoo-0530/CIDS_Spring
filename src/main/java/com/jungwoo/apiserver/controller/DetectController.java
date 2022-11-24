@@ -6,6 +6,8 @@ import com.jungwoo.apiserver.dto.CommonResponse;
 import com.jungwoo.apiserver.dto.mongo.detect.DetectDto;
 import com.jungwoo.apiserver.serviece.DetectService;
 import com.jungwoo.apiserver.serviece.MemberService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ import java.io.IOException;
  * description  :
  */
 
+@Api(tags = "CIDS 메인 서비스 Controller")
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -31,6 +34,7 @@ public class DetectController {
   private final MemberService memberService;
 
 
+  @ApiOperation(value = "CIDS 메인 서비스")
   @PostMapping("/detect")
   public ResponseEntity<? extends BasicResponse> searchService(@Validated @RequestBody DetectDto detectDto,
                                                                HttpServletRequest request) throws IOException, MessagingException {

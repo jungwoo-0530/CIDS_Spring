@@ -5,7 +5,10 @@ import com.jungwoo.apiserver.dto.BasicResponse;
 import com.jungwoo.apiserver.dto.CommonResponse;
 import com.jungwoo.apiserver.dto.maria.member.MemberCreateDto;
 import com.jungwoo.apiserver.domain.maria.Member;
+import com.jungwoo.apiserver.dto.maria.member.MemberDto;
 import com.jungwoo.apiserver.dto.maria.member.MemberPageDto;
+import com.jungwoo.apiserver.dto.maria.member.MemberUpdateDto;
+import com.jungwoo.apiserver.exception.validation.ValidationGroup;
 import com.jungwoo.apiserver.exception.validation.ValidationSequence;
 import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
 import com.jungwoo.apiserver.serviece.ImageService;
@@ -28,6 +31,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -38,7 +42,7 @@ import java.util.UUID;
  * author       : jungwoo
  * description  : Member Entity와 관련된 컨트롤러
  */
-@Api(tags = "회원 API 정보를 제공하는 Controller")
+@Api(tags = "회원 API Controller")
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -54,34 +58,23 @@ public class MemberController {
   @Value("${spring.image.member.relative}")
   private String imageMemberRelativeUri;
 
-  @ApiOperation(value = "회원가입하는 메소드")
+  @ApiOperation(value = "회원가입")
   @PostMapping("/register")
   public ResponseEntity<? extends BasicResponse> registerMember(@Validated(value = ValidationSequence.class) @RequestBody MemberCreateDto createMemberRequest) {
 
-
-
-    Member newMember = Member.builder().
-          name(createMemberRequest.getName()).
-          loginId(createMemberRequest.getLoginId()).
-          email(createMemberRequest.getEmail()).
-          password(createMemberRequest.getPassword()).
-          telephone(createMemberRequest.getTelephone()).
-          role("MEMBER").build();
-
-      Long id = memberService.save(newMember);
-
+      Long id = memberService.save(createMemberRequest);
 
       return ResponseEntity.status(HttpStatus.CREATED).body(new CommonResponse<>(id, "회원가입이 완료되었습니다."));
   }
 
 
-  @ApiOperation(value = "로그인하는 메소드")
+  @ApiOperation(value = "로그인")
   @PostMapping("/login")
   public ResponseEntity<? extends BasicResponse> login(@Validated @RequestBody loginRequest loginReq) {
 
     Member member = memberService.findByLoginId(loginReq.getLoginId());
 
-    memberService.loginIdMatches(loginReq.getPassword(), member.getPassword());
+    memberService.loginPasswordMatches(loginReq.getPassword(), member.getPassword());
 
     String token = jwtAuthenticationProvider.createToken(member.getLoginId());
     Date date = jwtAuthenticationProvider.getTokenExpired(token);
@@ -110,6 +103,7 @@ public class MemberController {
     private String password;
   }
 
+  @ApiOperation(value = "로그아웃")
   @PostMapping("/logout")
   public ResponseEntity<? extends BasicResponse> logout() {
 
@@ -117,9 +111,9 @@ public class MemberController {
   }
 
 
-  //  request 헤더에 있는 JWT 토큰값으로 해당하는 사용자.
-//  즉, 현재 로그인한 사용자의 정보(loginId, role)을 가져올 수 있음.
-//  ResponseEntity<>로 응답하기.
+
+  // 즉, jwt토큰으로 현재 로그인한 사용자의 정보(loginId, role)을 가져올 수 있음.
+  @ApiOperation(value = "회원 인증", notes = "jwt토큰으로 로그인ID와 권한을 조회합니다.")
   @GetMapping("/auth")
   public ResponseEntity<? extends BasicResponse> getRoleAndLoingId(HttpServletRequest req) {
     String token = jwtAuthenticationProvider.getTokenInRequestHeader(req, "Bearer");
@@ -130,7 +124,6 @@ public class MemberController {
         loginId(loginId).build()));
   }
 
-
   @Getter
   @Builder
   public static class AuthResponse {
@@ -138,6 +131,7 @@ public class MemberController {
     private String role;
   }
 
+  @ApiOperation(value = "회원 마이페이지", notes = "jwt토큰으로 해당 회원을 조회합니다.")
   @GetMapping("/members/me")
   public ResponseEntity<? extends BasicResponse> memberDetail(HttpServletRequest request) {
     log.info("memberDetail in MemberController");
@@ -154,32 +148,38 @@ public class MemberController {
   }
 
 
-  @Data
-  @Builder
-  public static class MemberDto {
-
-    private Long id;
-    private String name;
-    private String loginId;
-    private String email;
-    private String telephone;
-    private String role;
-    private String imgUri;
-  }
-
+  @ApiOperation(value = "회원 마이페이지 수정(업데이트)")
   @PutMapping("/members/me/update")
-  public ResponseEntity<? extends BasicResponse> updateMe(@RequestBody MemberDto memberDto) {
-    Member member = Member.builder().name(memberDto.getName()).
-        loginId(memberDto.getLoginId()).
-        email(memberDto.getEmail()).
-        telephone(memberDto.getTelephone()).build();
+  public ResponseEntity<? extends BasicResponse> updateMe(@Validated(value = ValidationSequence.class) @RequestBody MemberUpdateDto memberUpdateDto, HttpServletRequest request) {
 
-    memberService.updateMember(member);
+    //OSIV 영속성 컨텍스트. 더티체크.
+    Member member = memberService.getMemberByRequestJwt(request);
+
+    memberService.updateMember(member, memberUpdateDto);
 
     return ResponseEntity.ok().body(new CommonResponse<>("회원 업데이트를 성공했습니다."));
   }
 
+  @ApiOperation(value = "회원 비밀번호 수정")
+  @PutMapping("/members/me/password")
+  public ResponseEntity<? extends BasicResponse> updatePassword(@Validated(value = ValidationSequence.class) updatePasswordDto passwordDto, HttpServletRequest request){
 
+    Member member = memberService.getMemberByRequestJwt(request);
+
+    memberService.updatePassword(member, passwordDto.getNewPassword());
+
+    return ResponseEntity.ok().body(new CommonResponse<>("비밀번호 업데이트 성공했습니다."));
+  }
+
+
+    @Getter
+    private static class updatePasswordDto{
+      @NotBlank(message = "패스워드는 필수입니다.", groups = ValidationGroup.NotEmptyGroup.class)
+      @Size(min = 8, max = 16, message = "패스워드를 8~16자리 입력해주세요.", groups = ValidationGroup.SizeGroup.class)
+      private String newPassword;
+    }
+
+  @ApiOperation(value = "회원들 리스트 조회", notes = "회원들 리스트를 페이징하여 조회합니다.")
   @GetMapping("/members")
   public Page<MemberPageDto> listMember(@PageableDefault(size = 30, sort = "id", direction = Sort.Direction.ASC) Pageable pageable, HttpServletRequest request) {
 
@@ -189,6 +189,7 @@ public class MemberController {
 
   }
 
+  @ApiOperation(value = "회원 검색", notes = "admin이 searchWord로 회원 로그인ID로 조회합니다.")
   @GetMapping("/members/search")
   public Page<MemberPageDto> searchMember(@PageableDefault(size = 30, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
       @RequestBody String searchWord) {
@@ -200,20 +201,17 @@ public class MemberController {
 
 
 
-
+  @ApiOperation(value = "회원 권한 수정", notes = "admin이 memberId를 이용하여 회원을 조회 후 권한을 변경합니다.")
   @PutMapping("/members/{memberId}")
-  public ResponseEntity<? extends BasicResponse> updateMemberByAdmin(@PathVariable(name = "memberId") Long memberId,
-                                                                     @RequestBody MemberDto memberDto, HttpServletRequest request
-  ) {
-
+  public ResponseEntity<? extends BasicResponse> updateMemberByAdmin(@PathVariable(name = "memberId") Long memberId, @RequestBody MemberDto memberDto, HttpServletRequest request) {
 
     memberService.updateRoleMember(memberId, memberDto.getRole(), request);
-
 
     return ResponseEntity.ok().body(new CommonResponse<>("유저가 수정되었습니다."));
   }
 
 
+  @ApiOperation(value = "회원 이미지 생성", notes = "회원의 이미지를 생성합니다.")
   @PostMapping("/members/image")
   public ResponseEntity<? extends BasicResponse> uploadMemberImage(MultipartHttpServletRequest multipartReq) throws IOException {
 

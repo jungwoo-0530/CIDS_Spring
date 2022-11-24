@@ -36,7 +36,7 @@ import java.time.ZonedDateTime;
  * author       : jungwoo
  * description  :
  */
-@Api(tags = "게시글 API 정보를 제공하는 Controller")
+@Api(tags = "게시물 API Controller")
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -46,8 +46,7 @@ public class BoardController {
   private final MemberService memberService;
 
 
-  @ApiOperation(value = "카테고리에 맞는 게시글 목록을 반환하는 메소드")
-  @ApiImplicitParam(name = "type", value = "게시글 카테고리", dataType = "String")
+  @ApiOperation(value = "게시글 리스트 조회", notes = "postType에 맞는 게시글 리스트를 페이징하여 조회합니다.")
   @GetMapping("/boards")
   public Page<BoardPageDto> listBoard(@RequestParam(value = "boardType") String boardType,
                                       @PageableDefault(size = 10, sort = "id",
@@ -60,10 +59,7 @@ public class BoardController {
     return boardService.findPageSort(boardType, pageable);
   }
 
-  @ApiOperation(value = "게시글 하나를 읽는 메소드")
-  @ApiImplicitParams({
-      @ApiImplicitParam(name = "boardId", value = "게시글 아이디", paramType = "path", dataType = "Long"),
-  })
+  @ApiOperation(value = "게시글 하나를 조회", notes = "boardId를 이용해 게시글 하나를 조회합니다.")
   @GetMapping("/boards/{boardId}")
   public ResponseEntity<? extends BasicResponse> readBoard(@PathVariable(name = "boardId") Long boardId,
                                                            HttpServletRequest request) {
@@ -71,6 +67,7 @@ public class BoardController {
 
     Board board = boardService.getBoardAndAddHit(boardId);
 
+    //현재 로그인한 유저가 이 게시물에 대해서 수정,삭제할 권한이 있는지에 대한 boolean
     boolean editable = boardService.isAuthorityAtBoardUpdateAndDelete(request, board);
 
     BoardDto boardDto = BoardDto.builder().
@@ -106,10 +103,7 @@ public class BoardController {
     ZonedDateTime updateTime;
   }
 
-
-  @SneakyThrows
-  @ApiOperation(value = "게시글을 생성하는 메소드")
-  @ApiImplicitParam(name = "boardType", value = "게시글 카테고리")
+  @ApiOperation(value = "게시글 생성")
   @PostMapping("/boards")
   public ResponseEntity<? extends BasicResponse> createBoard(@RequestBody BoardCreateDto boardCreateDto,
                                                              HttpServletRequest request) throws IOException {
@@ -131,7 +125,7 @@ public class BoardController {
     return ResponseEntity.status(201).body(new CommonResponse<>(id, "게시물을 생성했습니다."));
   }
 
-
+  @ApiOperation(value = "게시글 삭제")
   @DeleteMapping("/boards/{boardId}")
   public ResponseEntity<? extends BasicResponse> deleteBoard(@PathVariable(name = "boardId") Long boardId, HttpServletRequest request) {
 
@@ -141,6 +135,7 @@ public class BoardController {
 
   }
 
+  @ApiOperation(value = "게시글 수정")
   @PutMapping("/boards/{boardId}")
   public ResponseEntity<? extends BasicResponse> updateBoard(@PathVariable(name = "boardId") Long boardId,
                                                             @Validated @RequestBody BoardUpdateDto boardUpdateDto,
@@ -159,6 +154,7 @@ public class BoardController {
 
   }
 
+  @ApiOperation(value = "게시글 검색", notes = "condition을 이용해 동적으로 게시글을 조회합니다.")
   @PostMapping("/boards/search")
   public Page<BoardPageDto> listBoardBySearch(@RequestBody BoardSearchCondition condition, @PageableDefault(size = 2, sort = "id",
                                               direction = Sort.Direction.DESC) Pageable pageable) {
@@ -170,7 +166,8 @@ public class BoardController {
 
   //글쓰기 클릭시 인증
   //공지사항은 admin만 qna는 모두다.
-  @GetMapping("/boards/authUser/{boardType}")
+  @ApiOperation(value = "게시글 작성 권한 체크", notes = "boardType에 따라서 게시글을 작성할 수 있는지 확인")
+  @GetMapping("/boards/auth/{boardType}")
   public ResponseEntity<? extends BasicResponse> authUser(@PathVariable(name = "boardType") String boardType,
                                                           HttpServletRequest request) {
 

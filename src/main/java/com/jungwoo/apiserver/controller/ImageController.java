@@ -6,10 +6,11 @@ import com.jungwoo.apiserver.dto.CommonResponse;
 import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
 import com.jungwoo.apiserver.serviece.ImageService;
 import com.jungwoo.apiserver.serviece.MemberService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ import java.util.UUID;
  * author       : jungwoo
  * description  :
  */
+@Api(tags = "이미지 관련된 API Controller")
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -45,9 +47,9 @@ public class ImageController {
   private String imageTempRelativeUri;
 
 
-  @SneakyThrows
+  @ApiOperation(value = "게시물 이미지 업로드")
   @PostMapping("/image/upload")
-  public ResponseEntity<? extends BasicResponse> imageUploadTest(MultipartHttpServletRequest multipartReq) throws IOException {
+  public ResponseEntity<? extends BasicResponse> imageUpload(MultipartHttpServletRequest multipartReq) throws IOException {
 
     MultipartFile mFile = multipartReq.getFile("upload");
 
@@ -90,7 +92,7 @@ public class ImageController {
   }
 
 
-
+  @ApiOperation(value = "이미지 삭제")
   @PostMapping("/image/delete")
   public ResponseEntity<? extends BasicResponse> deleteTempImage(HttpServletRequest request) {
 
