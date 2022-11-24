@@ -16,38 +16,34 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ImageUtil extends BaseTimeEntity {
+public class Image extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "IMAGEUTIL_ID")
+  @Column(name = "IMAGE_ID")
   private Long id;
 
-  private boolean useFlag;
+  private boolean isUse;
   private String fileName;
   private String fileUUID;
-  private String filePath;
+  private String fileRelativePath;
   private String fileAbsolutePath;
-  private String userPk;
+  private String loginId;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "BOARD_ID")
   private Board board;
 
 
-  public void changeBoard(Board board) {
-    this.board = board;
-  }
-
-  public void changeUseFlag(boolean useFlag) {
-    this.useFlag = useFlag;
-  }
-
-  public void changeFilePath(String filePath) {
-    this.filePath = filePath;
-  }
-
   public void changeFileAbsolutePath(String fileAbsolutePath) {
     this.fileAbsolutePath = fileAbsolutePath;
+  }
+
+
+  public void tempToPersistBoardImage(Board board, boolean useFlag, String imageAbsoluteUri, String imageRelativeUri) {
+    this.board = board;
+    this.isUse = useFlag;
+    this.fileRelativePath = imageRelativeUri;
+    this.fileAbsolutePath = imageAbsoluteUri;
   }
 }

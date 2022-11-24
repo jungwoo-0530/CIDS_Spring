@@ -5,6 +5,8 @@ import com.jungwoo.apiserver.dto.maria.board.BoardSearchCondition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 /**
  * fileName     : BoardRepositoryCustom
  * author       : jungwoo
@@ -14,4 +16,5 @@ public interface BoardRepositoryCustom {
   Page<BoardPageDto> findAllPageSort(String boardType, Pageable pageable);
 
   Page<BoardPageDto> findAllPageByKeyword(BoardSearchCondition condition, Pageable pageable);
+
 }

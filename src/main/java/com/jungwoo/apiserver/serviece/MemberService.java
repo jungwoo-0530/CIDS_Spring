@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.NoSuchElementException;
@@ -100,5 +101,10 @@ public class MemberService {
     if(!passwordEncoder.matches(requestPassword, password)){
       throw new CustomException(MemberErrorCode.MEMBER_PASSWORD_NOT_MATCH);
     }
+  }
+
+  @Transactional(readOnly = true)
+  public Member getMemberByMultiPartRequestJwt(MultipartHttpServletRequest request) {
+    return memberRepository.findByLoginId(jwtAuthenticationProvider.getUserPk(jwtAuthenticationProvider.getTokenInRequestHeader(request, "Bearer"))).orElseThrow(()->new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
   }
 }

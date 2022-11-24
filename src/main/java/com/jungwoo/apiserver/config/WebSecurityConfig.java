@@ -54,6 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .authorizeRequests()
         //board
+//        .antMatchers(HttpMethod.GET, "/boards?")
         .antMatchers(HttpMethod.GET, "/boards/{boardId}").authenticated()
         .antMatchers(HttpMethod.POST, "/boards/notification").hasRole("admin")
         .antMatchers(HttpMethod.POST, "/boards/qna").authenticated()

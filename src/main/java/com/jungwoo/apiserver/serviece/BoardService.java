@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
@@ -30,7 +29,7 @@ public class BoardService {
   private final BoardRepository boardRepository;
 
   private final MemberService memberService;
-  private final ImageUtilService imageUtilService;
+  private final ImageService imageService;
 
 
 
@@ -47,7 +46,7 @@ public class BoardService {
     try {
       boardRepository.save(board);
 
-      imageUtilService.permanentSaveImage(board.getMember().getLoginId(), board);
+      imageService.permanentSaveImage(board);
 
     } catch (IOException e) {
       throw new CustomException(BoardErrorCode.POST_SAVE_FAILED);
@@ -88,11 +87,15 @@ public class BoardService {
 
 
   @Transactional
-  public void updateBoard(Board board, HttpServletRequest request) {
+  public void updateBoard(Board board, HttpServletRequest request) throws IOException {
     Board one = boardRepository.findById(board.getId()).orElseThrow(()->new CustomException(BoardErrorCode.POSTS_NOT_FOUND));
     if(!isAuthorityAtBoardUpdateAndDelete(request, one))
       throw new CustomException(MemberErrorCode.MEMBER_NO_ACCESS);
     one.changeBoard(board);
+
+    imageService.permanentSaveImage(one);
+
+
   }
 
 
@@ -122,6 +125,33 @@ public class BoardService {
     }
 
   }
+
+
+
+
+
+//  @Transactional
+//  public void changeTempImageToImage(Board board, String imagePath, String imageName){
+//
+//    String targetUrl = "/img/" + board.getId() + "/";
+//    String boardHtml = board.getContent();
+//
+//    boardHtml = boardHtml.replace("/img/tempImage")
+//
+//    board.
+//
+//
+//  }
+//
+//  public static String changeTempImageToImage1(String html, String imagePath, List<String> imageNames){
+//    Long boardId;
+//    String targetString = "/img/tempImage/";
+//    //찾는
+//
+//    html = html.replace(targetString, imagePath);
+//
+//    return html;
+//  }
 
 
 }

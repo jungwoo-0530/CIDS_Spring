@@ -29,6 +29,7 @@ public class Member extends BaseTimeEntity {
   private String telephone;
   private String role;
 
+  private String imgUri;
 
   public void change(String name, String telephone){
     this.password = name;
@@ -43,7 +44,9 @@ public class Member extends BaseTimeEntity {
     this.password = password;
   }
 
-
+  public void changeImgUri(String imgUri){
+    this.imgUri = imgUri;
+  }
 
 
 }

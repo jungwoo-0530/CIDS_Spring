@@ -7,9 +7,7 @@ import com.jungwoo.apiserver.dto.maria.board.BoardCreateDto;
 import com.jungwoo.apiserver.dto.maria.board.BoardPageDto;
 import com.jungwoo.apiserver.dto.maria.board.BoardSearchCondition;
 import com.jungwoo.apiserver.dto.maria.board.BoardUpdateDto;
-import com.jungwoo.apiserver.exception.BoardErrorCode;
-import com.jungwoo.apiserver.exception.CustomException;
-import com.jungwoo.apiserver.serviece.ImageUtilService;
+import com.jungwoo.apiserver.serviece.ImageService;
 import com.jungwoo.apiserver.serviece.MemberService;
 import com.jungwoo.apiserver.serviece.BoardService;
 import io.swagger.annotations.Api;
@@ -47,6 +45,7 @@ public class BoardController {
   private final BoardService boardService;
   private final MemberService memberService;
 
+
   @ApiOperation(value = "카테고리에 맞는 게시글 목록을 반환하는 메소드")
   @ApiImplicitParam(name = "type", value = "게시글 카테고리", dataType = "String")
   @GetMapping("/boards")
@@ -74,7 +73,6 @@ public class BoardController {
 
     boolean editable = boardService.isAuthorityAtBoardUpdateAndDelete(request, board);
 
-
     BoardDto boardDto = BoardDto.builder().
         content(board.getContent()).
         title(board.getTitle()).
@@ -83,13 +81,12 @@ public class BoardController {
         email(board.getMember().getEmail()).
         available(board.isAvailable()).
         editable(editable).
+        memberImageUri(board.getMember().getImgUri()).
         updateTime(board.getUpdateDate()).
         createTime(board.getCreateDate()).
         build();
 
-
     return ResponseEntity.ok().body(new CommonResponse<>(boardDto, "게시물을 불러왔습니다."));
-
   }
 
   @Getter
@@ -102,6 +99,7 @@ public class BoardController {
     String type;
     String email;
     Member member;
+    String memberImageUri;
     boolean available;
     boolean editable;
     ZonedDateTime createTime;
@@ -137,8 +135,6 @@ public class BoardController {
   @DeleteMapping("/boards/{boardId}")
   public ResponseEntity<? extends BasicResponse> deleteBoard(@PathVariable(name = "boardId") Long boardId, HttpServletRequest request) {
 
-
-
     boardService.softDeleteBoard(boardId, request);
 
     return ResponseEntity.ok().body(new CommonResponse<>("게시물을 삭제했습니다."));
@@ -148,27 +144,27 @@ public class BoardController {
   @PutMapping("/boards/{boardId}")
   public ResponseEntity<? extends BasicResponse> updateBoard(@PathVariable(name = "boardId") Long boardId,
                                                             @Validated @RequestBody BoardUpdateDto boardUpdateDto,
-                                                             HttpServletRequest request) {
+                                                             HttpServletRequest request) throws IOException {
 
     log.info("BoardController updateBoard");
-
 
     Board newBoard = Board.builder().
         id(boardId).
         title(boardUpdateDto.getTitle()).
         content(boardUpdateDto.getContent()).build();
 
-
     boardService.updateBoard(newBoard, request);
 
     return ResponseEntity.ok().body(new CommonResponse<>("게시물을 수정했습니다."));
+
   }
 
-
-  @GetMapping("/boards/search")
+  @PostMapping("/boards/search")
   public Page<BoardPageDto> listBoardBySearch(@RequestBody BoardSearchCondition condition, @PageableDefault(size = 2, sort = "id",
                                               direction = Sort.Direction.DESC) Pageable pageable) {
-
+    log.info("boardSearch");
+    log.info(condition.getKeyword());
+    log.info(condition.getOption());
     return boardService.findAllPageBySearch(condition, pageable);
   }
 

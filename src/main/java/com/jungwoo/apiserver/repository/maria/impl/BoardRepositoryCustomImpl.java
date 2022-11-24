@@ -30,20 +30,7 @@ import static com.jungwoo.apiserver.domain.maria.QBoard.board;
 public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
   private final JPAQueryFactory jpaQueryFactory;
-//public BoardRepositoryCustomImpl() {
-//  super(Board.class);
-//}
-//
-//  private EntityManager em;
-//  private JPAQueryFactory jpaQueryFactory;
-//
-//  @Override
-//  @PersistenceContext(unitName = "firstEntityManager")
-//  public void setEntityManager(EntityManager entityManager) {
-//    super.setEntityManager(entityManager);
-//    em = entityManager;
-//    this.jpaQueryFactory = new JPAQueryFactory(entityManager);
-//  }
+
 
   @Override
   public Page<BoardPageDto> findAllPageSort(String pageType, Pageable pageable) {

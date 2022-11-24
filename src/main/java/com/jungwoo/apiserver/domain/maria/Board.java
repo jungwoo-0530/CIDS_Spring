@@ -48,4 +48,10 @@ public class Board extends BaseTimeEntity {
     this.available = flag;
   }
 
+  public void changeHtml(String html){
+    this.content = html;
+  }
+
+
+
 }

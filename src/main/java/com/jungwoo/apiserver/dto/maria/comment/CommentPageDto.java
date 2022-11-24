@@ -29,6 +29,8 @@ public class CommentPageDto {
 
   private Long deep;
 
+  private String memberImgUri;
+
 
   private Long parentId;
 

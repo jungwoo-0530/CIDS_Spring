@@ -2,10 +2,7 @@ package com.jungwoo.apiserver.repository.maria.impl;
 
 import com.jungwoo.apiserver.domain.maria.Comment;
 import com.jungwoo.apiserver.domain.maria.Member;
-//import com.jungwoo.apiserver.dto.maria.comment.CommentPageDto;
-//import com.jungwoo.apiserver.dto.maria.comment.QCommentPageDto;
 import com.jungwoo.apiserver.dto.maria.comment.CommentPageDto;
-//import com.jungwoo.apiserver.dto.maria.comment.QCommentPageDto;
 import com.jungwoo.apiserver.repository.maria.CommentRepositoryCustom;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
@@ -32,22 +29,7 @@ import static com.jungwoo.apiserver.domain.maria.QComment.comment;
 @Slf4j
 @RequiredArgsConstructor
 public class CommentRepositoryImpl implements CommentRepositoryCustom {
-//
-//  public CommentRepositoryImpl() {
-//    super(Comment.class);
-//  }
-//
-//  private EntityManager em;
-//  private JPAQueryFactory jpaQueryFactory;
-//
-//  @Override
-//  @PersistenceContext(unitName = "firstEntityManager")
-//  public void setEntityManager(EntityManager entityManager) {
-//    super.setEntityManager(entityManager);
-//    em = entityManager;
-//    this.jpaQueryFactory = new JPAQueryFactory(entityManager);
-//  }
-//
+
   private final JPAQueryFactory jpaQueryFactory;
 
   @Override
@@ -81,6 +63,7 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
                 comment.available.as("available"),
                 getEditableEq(member).as("editable"),
                 comment.member.loginId.as("author"),
+                Expressions.asString(comment.member.imgUri).as("memberImgUri"),
                 comment.content.as("content"),
                 comment.parentComment.id.as("parentId"),
                 comment.depth.as("deep"),
