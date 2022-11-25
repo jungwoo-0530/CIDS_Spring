@@ -1,5 +1,6 @@
 package com.jungwoo.apiserver.dto.maria.board;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -9,10 +10,13 @@ import lombok.Data;
  */
 
 @Data
+@Builder
 public class BoardSearchCondition {
 
   private String option;
 
   private String keyword;
+
+  private String boardType;
 
 }

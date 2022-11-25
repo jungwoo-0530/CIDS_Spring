@@ -91,7 +91,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 board.updateDate.as("updateDate")
 
             ))
-        .where(searchOption(condition))
+        .where(board.type.eq(condition.getBoardType()).and(searchOption(condition)).and(board.available.eq(true)))
         .from(board)
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize());
@@ -198,6 +198,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
     String option = condition.getOption();
     String keyword = condition.getKeyword();
+//    String boardType = condition.getBoardType();
 
     if (option.equals("title")) {
       return board.title.contains(keyword);

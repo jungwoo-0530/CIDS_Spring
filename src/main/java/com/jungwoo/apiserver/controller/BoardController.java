@@ -155,13 +155,12 @@ public class BoardController {
   }
 
   @ApiOperation(value = "게시글 검색", notes = "condition을 이용해 동적으로 게시글을 조회합니다.")
-  @PostMapping("/boards/search")
-  public Page<BoardPageDto> listBoardBySearch(@RequestBody BoardSearchCondition condition, @PageableDefault(size = 2, sort = "id",
+  @GetMapping("/boards/search")
+  public Page<BoardPageDto> listBoardBySearch(@RequestParam String option, @RequestParam String keyword, @RequestParam String boardType, @PageableDefault(size = 10, sort = "id",
                                               direction = Sort.Direction.DESC) Pageable pageable) {
-    log.info("boardSearch");
-    log.info(condition.getKeyword());
-    log.info(condition.getOption());
-    return boardService.findAllPageBySearch(condition, pageable);
+
+
+    return boardService.findAllPageBySearch(BoardSearchCondition.builder().option(option).keyword(keyword).boardType(boardType).build(), pageable);
   }
 
   //글쓰기 클릭시 인증
