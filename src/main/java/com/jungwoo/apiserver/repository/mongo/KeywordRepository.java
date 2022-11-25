@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.security.Key;
+import java.util.List;
 
 /**
  * fileName     : KeywordRepository
@@ -12,6 +13,8 @@ import java.security.Key;
  * description  :
  */
 @Repository
-public interface KeywordRepository extends MongoRepository<Keyword, String> {
+public interface KeywordRepository extends MongoRepository<Keyword, String>, KeywordRepositoryCustom {
+
+//  Set<> countDistinctByUserId();
 
 }

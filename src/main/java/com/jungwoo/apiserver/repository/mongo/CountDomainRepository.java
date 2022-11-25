@@ -7,6 +7,8 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * fileName     : CountDomainRepository
  * author       : jungwoo
@@ -15,4 +17,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 //@EnableMongoRepositories
 public interface CountDomainRepository extends MongoRepository<CountDomain, String>, CountDomainRepositoryCustom {
+  List<CountDomain> findTop5ByOrderByHitDesc();
 }

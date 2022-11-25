@@ -20,4 +20,5 @@ public interface ResultRepository extends MongoRepository<Result, String>{
   @Query("{'keyword_id': :#{#keywordId}, 'label': :#{#label}}")
   List<Result> findAllByKeywordIdAndLabel(@Param("keywordId") String keywordId, @Param("label")Integer label);
 
+  List<Result> findAllByLabel(Integer label);
 }

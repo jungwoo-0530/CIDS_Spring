@@ -81,6 +81,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         //Detect
         .antMatchers(HttpMethod.POST, "/detect").authenticated()
+        .antMatchers(HttpMethod.GET, "/dashboard").permitAll()
 
         .and()
         .formLogin().disable()

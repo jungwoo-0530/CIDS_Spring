@@ -3,8 +3,10 @@ package com.jungwoo.apiserver.serviece;
 import com.jungwoo.apiserver.domain.mongo.CountDomain;
 import com.jungwoo.apiserver.domain.mongo.Keyword;
 import com.jungwoo.apiserver.domain.mongo.Result;
-import com.jungwoo.apiserver.dto.mongo.countdomain.CountDomainPageDto;
 import com.jungwoo.apiserver.dto.mongo.detect.DetectDto;
+import com.jungwoo.apiserver.dto.mongo.detect.DashboardDto;
+import com.jungwoo.apiserver.dto.mongo.detect.DomainsDto;
+import com.jungwoo.apiserver.dto.mongo.detect.SearchKeywordDto;
 import com.jungwoo.apiserver.repository.mongo.CountDomainRepository;
 import com.jungwoo.apiserver.repository.mongo.KeywordRepository;
 import com.jungwoo.apiserver.repository.mongo.ResultRepository;
@@ -29,10 +31,7 @@ import javax.mail.internet.MimeUtility;
 import java.io.*;
 import java.net.URI;
 import java.time.ZonedDateTime;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -149,6 +148,81 @@ public class DetectService {
     response.put("numberOfElements", allPageSort.getContent().size());
 
     return response;
+  }
+
+
+  @Transactional
+  public DashboardDto getDashboard(){
+
+
+    List<Result> results = resultRepository.findAllByLabel(0);
+    OptionalDouble average = results.stream().map(r -> r.getAccuracy()).mapToDouble(r -> r.doubleValue()).average();
+
+    List<Keyword> keywords = keywordRepository.findAll();
+    List<SearchKeywordDto> searchKeywords = getSearchKeywordsSorted(keywords);
+
+    int memberCount = getMemberCount(keywords);
+
+    //domains
+    List<CountDomain> countDomains = countDomainRepository.findTop5ByOrderByHitDesc();
+//    List<String> domains = countDomains.stream().map(c -> c.getDomain()).collect(Collectors.toList());
+    List<DomainsDto> domainsDtos = getDomainsDto(countDomains);
+
+    return DashboardDto.builder().searchKeywords(searchKeywords).averageAccuracy(average.getAsDouble()).keywordCount(keywordRepository.count()).domains(domainsDtos).memberCount((long) memberCount).build();
+
+  }
+
+  private List<SearchKeywordDto> getSearchKeywordsSorted(List<Keyword> keywords){
+
+
+    Map<String, Integer> temp = new HashMap<>();
+    for(Keyword k : keywords){
+      Integer count = temp.get(k.getKeyword());
+      if(count == null){
+        temp.put(k.getKeyword(), 1);
+      }else{
+        temp.put(k.getKeyword(), count+1);
+      }
+    }
+    List<String> keySet = new ArrayList<>(temp.keySet());
+    keySet.sort((o1, o2) -> temp.get(o2).compareTo(temp.get(o1)));
+
+    List<String> subList = new ArrayList<>(keySet.subList(0, 5));
+
+    List<SearchKeywordDto> result = new ArrayList<>();
+    Long l = 1L;
+    for(String s : subList){
+      result.add(SearchKeywordDto.builder().rank(l).keyword(s).build());
+      l++;
+    }
+
+    return result;
+  }
+
+  private List<DomainsDto> getDomainsDto(List<CountDomain> domains){
+
+    Long l = 1L;
+    List<DomainsDto> result = new ArrayList<>();
+    for(CountDomain d : domains){
+      result.add(DomainsDto.builder().rank(l).domain(d.getDomain()).build());
+      l++;
+    }
+    return result;
+  }
+
+  private int getMemberCount(List<Keyword> keywords){
+
+
+    Map<String, Integer> temp = new HashMap<>();
+    for(Keyword k : keywords){
+      Integer count = temp.get(k.getKeyword());
+      if(count == null){
+        temp.put(k.getKeyword(), 1);
+      }
+    }
+
+
+    return temp.size();
   }
 
 }

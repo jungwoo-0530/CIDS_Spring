@@ -3,6 +3,7 @@ package com.jungwoo.apiserver.controller;
 import com.jungwoo.apiserver.domain.maria.Member;
 import com.jungwoo.apiserver.dto.BasicResponse;
 import com.jungwoo.apiserver.dto.CommonResponse;
+import com.jungwoo.apiserver.dto.mongo.detect.DashboardDto;
 import com.jungwoo.apiserver.dto.mongo.detect.DetectDto;
 import com.jungwoo.apiserver.serviece.DetectService;
 import com.jungwoo.apiserver.serviece.MemberService;
@@ -53,6 +54,17 @@ public class DetectController {
 
     return ResponseEntity.status(200).body(new CommonResponse<>("detect 완료"));
   }
+
+
+  @GetMapping("/dashboard")
+  public ResponseEntity<? extends BasicResponse> dashboard(){
+
+    DashboardDto dto = detectService.getDashboard();
+
+    return ResponseEntity.status(200).body(new CommonResponse<>(dto, "dashboard 완료"));
+  }
+
+
 
 
 }
