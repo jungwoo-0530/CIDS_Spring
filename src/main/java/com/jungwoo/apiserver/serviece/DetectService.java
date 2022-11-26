@@ -124,8 +124,6 @@ public class DetectService {
 
   }
 
-
-
   public String makeCsv(String keywordId, String userEmail, String keyword) throws IOException {
     List<Result> result = resultRepository.findAllByKeywordIdAndLabel(keywordId, 0);
 
@@ -133,24 +131,6 @@ public class DetectService {
 
     return csvUtil.writeCSV(title, result.stream().map(r -> r.getUrl()).collect(Collectors.toList()));
   }
-
-
-  @Transactional
-  public Map<String, Object> findCountDomainPage(Pageable pageable) {
-    Page<CountDomain> allPageSort = countDomainRepository.findAll(pageable);
-    List<CountDomain> a = allPageSort.getContent();
-
-    Map<String, Object> response = new HashMap<>();
-    response.put("content", a);
-    response.put("pageSize", pageable.getPageSize());
-    response.put("currentPage", allPageSort.getNumber());
-    response.put("totalItems", allPageSort.getTotalElements());
-    response.put("totalPages", allPageSort.getTotalPages());
-    response.put("numberOfElements", allPageSort.getContent().size());
-
-    return response;
-  }
-
 
   @Transactional
   public DashboardDto getDashboard(){
@@ -163,7 +143,6 @@ public class DetectService {
     return DashboardDto.builder().searchKeywords(keywordRepository.getKeywordsOrderByDesc()).averageAccuracy(average.getAsDouble()).keywordCount(keywordRepository.countKeywordCount()).domains(countDomainRepository.getTop5DomainsOrderByHit()).memberCount(keywordRepository.getMemberAtKeywords()).build();
 
   }
-
 
   @Transactional
   public Page<CountDomain> findAllPage(Pageable pageable){
