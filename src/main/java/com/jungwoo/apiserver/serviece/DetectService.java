@@ -3,6 +3,7 @@ package com.jungwoo.apiserver.serviece;
 import com.jungwoo.apiserver.domain.mongo.CountDomain;
 import com.jungwoo.apiserver.domain.mongo.Keyword;
 import com.jungwoo.apiserver.domain.mongo.Result;
+import com.jungwoo.apiserver.dto.mongo.countdomain.CountDomainPageDto;
 import com.jungwoo.apiserver.dto.mongo.detect.DetectDto;
 import com.jungwoo.apiserver.dto.mongo.detect.DashboardDto;
 import com.jungwoo.apiserver.dto.mongo.detect.DomainsDto;
@@ -161,6 +162,12 @@ public class DetectService {
 
     return DashboardDto.builder().searchKeywords(keywordRepository.getKeywordsOrderByDesc()).averageAccuracy(average.getAsDouble()).keywordCount(keywordRepository.countKeywordCount()).domains(countDomainRepository.getTop5DomainsOrderByHit()).memberCount(keywordRepository.getMemberAtKeywords()).build();
 
+  }
+
+
+  @Transactional
+  public Page<CountDomain> findAllPage(Pageable pageable){
+    return countDomainRepository.findCountDomainPaging(pageable);
   }
 
 }
