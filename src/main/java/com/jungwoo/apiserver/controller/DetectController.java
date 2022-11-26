@@ -55,7 +55,7 @@ public class DetectController {
     return ResponseEntity.status(200).body(new CommonResponse<>("detect 완료"));
   }
 
-
+  @ApiOperation(value = "대쉬보드")
   @GetMapping("/dashboard")
   public ResponseEntity<? extends BasicResponse> dashboard(){
 
@@ -63,8 +63,5 @@ public class DetectController {
 
     return ResponseEntity.status(200).body(new CommonResponse<>(dto, "dashboard 완료"));
   }
-
-
-
 
 }

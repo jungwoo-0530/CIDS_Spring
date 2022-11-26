@@ -11,6 +11,6 @@ import lombok.Data;
 @Data
 @Builder
 public class DomainsDto {
-  private Long rank;
+  private Integer rank;
   private String domain;
 }

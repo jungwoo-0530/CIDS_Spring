@@ -12,7 +12,7 @@ import lombok.Data;
 @Builder
 public class SearchKeywordDto {
 
-  private Long rank;
+  private Integer rank;
   private String keyword;
 
 }

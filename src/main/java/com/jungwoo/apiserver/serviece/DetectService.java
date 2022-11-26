@@ -158,71 +158,9 @@ public class DetectService {
     List<Result> results = resultRepository.findAllByLabel(0);
     OptionalDouble average = results.stream().map(r -> r.getAccuracy()).mapToDouble(r -> r.doubleValue()).average();
 
-    List<Keyword> keywords = keywordRepository.findAll();
-    List<SearchKeywordDto> searchKeywords = getSearchKeywordsSorted(keywords);
 
-    int memberCount = getMemberCount(keywords);
+    return DashboardDto.builder().searchKeywords(keywordRepository.getKeywordsOrderByDesc()).averageAccuracy(average.getAsDouble()).keywordCount(keywordRepository.countKeywordCount()).domains(countDomainRepository.getTop5DomainsOrderByHit()).memberCount(keywordRepository.getMemberAtKeywords()).build();
 
-    //domains
-    List<CountDomain> countDomains = countDomainRepository.findTop5ByOrderByHitDesc();
-//    List<String> domains = countDomains.stream().map(c -> c.getDomain()).collect(Collectors.toList());
-    List<DomainsDto> domainsDtos = getDomainsDto(countDomains);
-
-    return DashboardDto.builder().searchKeywords(searchKeywords).averageAccuracy(average.getAsDouble()).keywordCount(keywordRepository.count()).domains(domainsDtos).memberCount((long) memberCount).build();
-
-  }
-
-  private List<SearchKeywordDto> getSearchKeywordsSorted(List<Keyword> keywords){
-
-
-    Map<String, Integer> temp = new HashMap<>();
-    for(Keyword k : keywords){
-      Integer count = temp.get(k.getKeyword());
-      if(count == null){
-        temp.put(k.getKeyword(), 1);
-      }else{
-        temp.put(k.getKeyword(), count+1);
-      }
-    }
-    List<String> keySet = new ArrayList<>(temp.keySet());
-    keySet.sort((o1, o2) -> temp.get(o2).compareTo(temp.get(o1)));
-
-    List<String> subList = new ArrayList<>(keySet.subList(0, 5));
-
-    List<SearchKeywordDto> result = new ArrayList<>();
-    Long l = 1L;
-    for(String s : subList){
-      result.add(SearchKeywordDto.builder().rank(l).keyword(s).build());
-      l++;
-    }
-
-    return result;
-  }
-
-  private List<DomainsDto> getDomainsDto(List<CountDomain> domains){
-
-    Long l = 1L;
-    List<DomainsDto> result = new ArrayList<>();
-    for(CountDomain d : domains){
-      result.add(DomainsDto.builder().rank(l).domain(d.getDomain()).build());
-      l++;
-    }
-    return result;
-  }
-
-  private int getMemberCount(List<Keyword> keywords){
-
-
-    Map<String, Integer> temp = new HashMap<>();
-    for(Keyword k : keywords){
-      Integer count = temp.get(k.getKeyword());
-      if(count == null){
-        temp.put(k.getKeyword(), 1);
-      }
-    }
-
-
-    return temp.size();
   }
 
 }

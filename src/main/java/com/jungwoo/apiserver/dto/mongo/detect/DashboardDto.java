@@ -14,9 +14,9 @@ import java.util.List;
 @Builder
 public class DashboardDto {
 
-  private Long keywordCount;
+  private Integer keywordCount;
 
-  private Long memberCount;
+  private Integer memberCount;
 
   private Double averageAccuracy;
 

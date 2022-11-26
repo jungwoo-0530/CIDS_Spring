@@ -2,6 +2,7 @@ package com.jungwoo.apiserver.repository.mongo;
 
 
 import com.jungwoo.apiserver.domain.mongo.CountDomain;
+import com.jungwoo.apiserver.dto.mongo.detect.DomainsDto;
 
 import java.util.List;
 
@@ -11,4 +12,6 @@ import java.util.List;
  * description  :
  */
 public interface CountDomainRepositoryCustom {
+
+  List<DomainsDto> getTop5DomainsOrderByHit();
 }
