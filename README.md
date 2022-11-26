@@ -1,19 +1,16 @@
 # CIDS 백엔드 - Spring Boot
 
-Problem : 
+최근 5년간 영화 드라마, 웹툰 등의 콘텐츠 저작권 불법 침해 사이트의 수가 2만 1043개에 달하는것으로 나타났다.
 
-Idea :
-
-Solution : 
+현재는 저작권 침해 사이트 탐지를 위한 서비스가 보편화 되어있지 않다. 따라서 어떻게 하면 사용자들이 편리하게 접근하여 저작권 침해 의심 사이트를 탐지할 수 있을까 생각하였고 이러한 프로젝트를 기획하게 되었다.
 
 
 
-- [FrontEnd](https://github.com/jungwoo-0530/CIDS_Front)
-- [머신 러닝(Flask)](https://github.com/jungwoo-0530/CIDS_LM)
+
 
 # 목차
 
-- [주요 기능과 로직](#주요-기능)
+- [주요 기능과 로직](#주요-기능과-로직)
 
 - [서비스 구조](#서비스-구조)
 - [기술 스택](#기술-스택)
@@ -23,7 +20,7 @@ Solution :
   - [API 명세서](#API-명세서(Spring-Boot))
   - [DB 명세서](#DB-명세서)
 
-
+- [Front & 머신 러닝(Flask)](Front-&-머신-러닝(Flask))
 
 
 
@@ -47,37 +44,33 @@ Solution :
 
 ## 서비스 구조
 
-
+- 대략적인 서비스 플로우
 
 <img src="img/README/image-20221126211733941.png" alt="image-20221126211733941" style="zoom:50%;" />
 
-<center><대략적인 서비스 플로우></center>  
 
 
 
 
+- CIDS Web App Architecture
 
 <img src="img/README/Screenshot of Safari (2022-11-26 10-58-14 PM).png" alt="Screenshot of Safari (2022-11-26 10-58-14 PM)" style="zoom:50%;" />
 
-<center>CIDS Web App Architecture</center>
+- 이메일 결과
+
+<img src="img/README/Screenshot of Mail (2022-11-26 9-16-15 PM).png" alt="Screenshot of Mail (2022-11-26 9-16-15 PM)" style="zoom: 33%;" />
 
 
-
-<img src="img/README/Screenshot of Mail (2022-11-26 9-16-15 PM).png" alt="Screenshot of Mail (2022-11-26 9-16-15 PM)" style="zoom:50%;" />
-
-
-
-<center>이메일 결과</center>  
 
 ## 기술 스택
 
 - Front
   - Javascript, React
 - Back
-  - Java - version 8, SpringBoot, Spring Data JPA, Gradle
+  - Java - version 8, SpringBoot, Spring Data JPA, QueryDsl, Gradle
   - Python - version 3.10,  Flask, Google Vision Api
   - MariaDB, MongoDB
-  - AWS(EC2, RDS, S3,  Document DB) 
+  - AWS(EC2, RDS, S3,  Document DB)
 
 ## 기획 & 설계
 
@@ -112,3 +105,18 @@ Solution :
 
 
 ### DB 명세서
+
+
+
+- Maria DB
+
+<img src="img/README/Screenshot of IntelliJ IDEA (2022-11-27 1-58-56 AM).png" alt="Screenshot of IntelliJ IDEA (2022-11-27 1-58-56 AM)" style="zoom:50%;" />
+
+- Mongo DB
+
+<img src="img/README/Screenshot of IntelliJ IDEA (2022-11-27 1-51-10 AM).png" alt="Screenshot of IntelliJ IDEA (2022-11-27 1-51-10 AM)" style="zoom:50%;" />
+
+## Front & 머신 러닝(Flask)
+
+- [FrontEnd](https://github.com/jungwoo-0530/CIDS_Front)
+- [머신 러닝(Flask)](https://github.com/jungwoo-0530/CIDS_LM)
