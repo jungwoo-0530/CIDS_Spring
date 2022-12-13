@@ -1,5 +1,6 @@
 package com.jungwoo.apiserver.config;
 
+import com.jungwoo.apiserver.security.RefererCheckInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -29,4 +30,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
         .allowedOrigins(frontUri)
         .allowedMethods("OPTIONS", "GET", "POST", "PUT", "DELETE"); }
 
+
+  @Override
+  public void addInterceptors(InterceptorRegistry registry) {
+    registry.addInterceptor(new RefererCheckInterceptor())
+        .addPathPatterns("/*");
+  }
 }

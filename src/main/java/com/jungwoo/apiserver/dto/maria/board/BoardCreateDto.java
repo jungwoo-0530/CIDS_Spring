@@ -17,3 +17,9 @@ public class BoardCreateDto {
   private String content;
   private String type;
 }
+
+//{
+//  "title": "",
+//  "content": "",
+//  "type": ""
+//}

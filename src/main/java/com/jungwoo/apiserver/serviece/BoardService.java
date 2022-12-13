@@ -119,7 +119,6 @@ public class BoardService {
   public void checkAuthorityAtBoardWrite(String boardType, Member member) {
 
     if (member.getRole().equals("ADMIN") || (boardType.equals("qna") && member.getRole().equals("MEMBER"))) {
-      return;
     }else{
       throw new CustomException(MemberErrorCode.MEMBER_NO_ACCESS);
     }

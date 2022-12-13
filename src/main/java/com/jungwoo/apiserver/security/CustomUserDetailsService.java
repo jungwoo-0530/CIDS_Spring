@@ -34,8 +34,10 @@ public class CustomUserDetailsService implements UserDetailsService {
   }
 
   private Member getMember(String loginId) {
-    return (Member)memberRepository.findByLoginId(loginId).orElseThrow(() -> new UsernameNotFoundException("not found loginId : " + loginId));
+    return memberRepository.findByLoginId(loginId).orElseThrow(() -> new UsernameNotFoundException("not found loginId : " + loginId));
   }
+
+
 
 
 //  public static boolean hasAdminRole() {

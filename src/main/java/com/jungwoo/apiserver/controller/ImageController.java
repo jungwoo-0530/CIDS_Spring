@@ -74,8 +74,6 @@ public class ImageController {
     build();
 
     imageService.temporarySave(temp);
-    String saveTempImagePath = imageTempAbsoluteUri + savedName;
-    String tempImagePath = imageTempRelativeUri + savedName;
 
     mFile.transferTo(new File(imageAbsolutePath));
     ImageDto imageDto =  ImageDto.builder().uploaded(true).imageUrl(imageRelativePath).build();

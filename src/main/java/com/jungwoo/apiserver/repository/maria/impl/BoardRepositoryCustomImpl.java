@@ -69,6 +69,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
         .fetch().size();
 
 
+
     List<BoardPageDto> content = query.fetch();
     return new PageImpl<>(content, pageable, total);
 
@@ -208,6 +209,5 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
       return board.member.loginId.like(keyword);
     }
   }
-
 
 }

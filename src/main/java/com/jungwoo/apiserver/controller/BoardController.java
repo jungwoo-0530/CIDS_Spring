@@ -165,7 +165,7 @@ public class BoardController {
 
   //글쓰기 클릭시 인증
   //공지사항은 admin만 qna는 모두다.
-  @ApiOperation(value = "게시글 작성 권한 체크", notes = "boardType에 따라서 게시글을 작성할 수 있는지 확인")
+  @ApiOperation(value = "게시판에 따른 게시글 작성 권한 체크", notes = "boardType에 따라서 게시글을 작성할 수 있는지 확인")
   @GetMapping("/boards/auth/{boardType}")
   public ResponseEntity<? extends BasicResponse> authUser(@PathVariable(name = "boardType") String boardType,
                                                           HttpServletRequest request) {

@@ -3,16 +3,11 @@ package com.jungwoo.apiserver.serviece;
 import com.jungwoo.apiserver.domain.mongo.Keyword;
 import com.jungwoo.apiserver.repository.mongo.KeywordRepository;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Key;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * fileName     : KeywordService

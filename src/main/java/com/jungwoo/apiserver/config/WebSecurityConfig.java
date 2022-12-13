@@ -19,6 +19,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 /**
  * fileName     : WebSecurityConfig
  * author       : jungwoo
@@ -99,8 +101,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     auth.userDetailsService(customUserDetailService).passwordEncoder(passwordEncoder());
   }
 
-
-
   @Bean
   RoleHierarchy roleHierarchy(){
     RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
@@ -118,6 +118,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     web.ignoring().mvcMatchers("/swagger-ui.html/**", "/configuration/**", "/swagger-resources/**", "/v3/api-docs","/webjars/**",
         "/swagger-ui", "/swagger-ui/**");
   }
+
+
 
   @Bean
   @Override

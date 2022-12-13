@@ -43,6 +43,7 @@ import java.util.regex.Pattern;
 @Slf4j
 public class ImageService {
 
+
   private final ImageRepository imageRepository;
 
   @Value("${spring.image.board.temp.absolute}")
@@ -61,6 +62,7 @@ public class ImageService {
 
   @Transactional
   public void permanentSaveImage(Board board) throws IOException {
+
 
     //영구 저장할 새로운 절대 경로 디렉토리를 생성.
     makeDirWithBoardId(board);
@@ -204,66 +206,4 @@ public class ImageService {
   }
 
 
-
-  private
-
-  @Getter
-  @Setter
-  static class MultipartImage implements MultipartFile{
-
-    private byte[] bytes;
-    String name;
-    String originalFilename;
-    String contentType;
-    boolean isEmpty;
-    long size;
-
-    public MultipartImage(byte[] bytes) {
-      this.bytes = bytes;
-    }
-
-    public byte[] getBytes() {
-      return bytes;
-    }
-
-    public String getName() {
-      return name;
-    }
-
-    public String getOriginalFilename() {
-      return originalFilename;
-    }
-
-    public String getContentType() {
-      return contentType;
-    }
-
-    public boolean isEmpty() {
-      return isEmpty;
-    }
-
-    public long getSize() {
-      return size;
-    }
-
-    @Override
-    public Resource getResource() {
-      return MultipartFile.super.getResource();
-    }
-
-    @Override
-    public void transferTo(Path dest) throws IOException, IllegalStateException {
-      MultipartFile.super.transferTo(dest);
-    }
-
-    @Override
-    public InputStream getInputStream() throws IOException {
-      return null;
-    }
-
-    @Override
-    public void transferTo(File dest) throws IOException, IllegalStateException {
-
-    }
-  }
 }

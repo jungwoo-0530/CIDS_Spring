@@ -94,6 +94,7 @@ public class MemberService {
     member.changeRole(role);
   }
 
+  @Transactional
   public void isAdmin(HttpServletRequest request) {
     Member member = getMemberByRequestJwt(request);
     if(!member.getRole().equals("ADMIN"))

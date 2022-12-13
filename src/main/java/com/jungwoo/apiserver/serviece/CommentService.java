@@ -69,7 +69,7 @@ public class CommentService {
       commentRepository.save(comment);
 
     }
-  };
+  }
 
   @Transactional
   public void initSave(Comment comment) {

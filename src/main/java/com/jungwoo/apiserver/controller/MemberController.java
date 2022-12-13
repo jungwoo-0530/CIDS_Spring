@@ -87,7 +87,7 @@ public class MemberController {
 
   @Getter
   @Builder
-  public static class TokenResponse {
+  private static class TokenResponse {
     private String accessToken;
     private Date tokenExpired;
     private String tokenType;
@@ -115,7 +115,7 @@ public class MemberController {
   // 즉, jwt토큰으로 현재 로그인한 사용자의 정보(loginId, role)을 가져올 수 있음.
   @ApiOperation(value = "회원 인증", notes = "jwt토큰으로 로그인ID와 권한을 조회합니다.")
   @GetMapping("/auth")
-  public ResponseEntity<? extends BasicResponse> getRoleAndLoingId(HttpServletRequest req) {
+  public ResponseEntity<? extends BasicResponse> getRoleAndLoginId(HttpServletRequest req) {
     String token = jwtAuthenticationProvider.getTokenInRequestHeader(req, "Bearer");
     String role = jwtAuthenticationProvider.getRole(token);
     String loginId = jwtAuthenticationProvider.getUserPk(token);
@@ -126,7 +126,7 @@ public class MemberController {
 
   @Getter
   @Builder
-  public static class AuthResponse {
+  private static class AuthResponse {
     private String loginId;
     private String role;
   }
@@ -157,12 +157,13 @@ public class MemberController {
 
     memberService.updateMember(member, memberUpdateDto);
 
+
     return ResponseEntity.ok().body(new CommonResponse<>("회원 업데이트를 성공했습니다."));
   }
 
   @ApiOperation(value = "회원 비밀번호 수정")
   @PutMapping("/members/me/password")
-  public ResponseEntity<? extends BasicResponse> updatePassword(@Validated(value = ValidationSequence.class) updatePasswordDto passwordDto, HttpServletRequest request){
+  public ResponseEntity<? extends BasicResponse> updatePassword(@Validated(value = ValidationSequence.class) passwordUpdateDto passwordDto, HttpServletRequest request){
 
     Member member = memberService.getMemberByRequestJwt(request);
 
@@ -173,7 +174,7 @@ public class MemberController {
 
 
     @Getter
-    private static class updatePasswordDto{
+    private static class passwordUpdateDto {
       @NotBlank(message = "패스워드는 필수입니다.", groups = ValidationGroup.NotEmptyGroup.class)
       @Size(min = 8, max = 16, message = "패스워드를 8~16자리 입력해주세요.", groups = ValidationGroup.SizeGroup.class)
       private String newPassword;

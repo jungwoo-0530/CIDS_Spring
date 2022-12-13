@@ -2,7 +2,6 @@ package com.jungwoo.apiserver.repository.mongo;
 
 
 import com.jungwoo.apiserver.domain.mongo.CountDomain;
-import com.jungwoo.apiserver.dto.mongo.countdomain.CountDomainPageDto;
 import com.jungwoo.apiserver.dto.mongo.detect.DomainsDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
