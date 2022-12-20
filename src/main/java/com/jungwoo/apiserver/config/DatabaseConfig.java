@@ -47,5 +47,4 @@ public class DatabaseConfig {
     return new MongoTemplate(mongoDatabaseFactory());
   }
 
-
 }

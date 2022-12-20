@@ -1,5 +1,6 @@
-package com.jungwoo.apiserver.exception;
+package com.jungwoo.apiserver.exception.errorcode;
 
+import com.jungwoo.apiserver.exception.ErrorCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,7 +12,7 @@ import org.springframework.http.HttpStatus;
  */
 @Getter
 @RequiredArgsConstructor
-public enum BoardErrorCode implements ErrorCode{
+public enum BoardErrorCode implements ErrorCode {
 
   POSTS_NOT_FOUND(HttpStatus.NOT_FOUND, "게시글 정보를 찾을 수 없습니다."),
 

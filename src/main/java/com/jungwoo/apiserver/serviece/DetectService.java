@@ -19,6 +19,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -44,8 +46,13 @@ import java.util.stream.Collectors;
 public class DetectService {
   @Value(("${email.subject}"))
   private String subject;
-  @Value("${email.text}")
-  private String text;
+  @Value("${email.text.success}")
+  private String successText;
+
+  @Value("${email.text.error}")
+  private String errorText;
+
+
 
   @Value(("${python.flask.url}"))
   private String flaskBaseURL;
@@ -76,7 +83,7 @@ public class DetectService {
     return save.getId().toHexString();
   }
 
-  @Async
+  @Async(value = "taskExecutor")
   @Transactional
   public void execDetect(DetectDto detectDto, String id) throws IOException, MessagingException {
 
@@ -92,21 +99,39 @@ public class DetectService {
 
     //result = keyword collection의 _id값이 넘어옴
     //ObjectId()가 제거된 형태로.
-    String keywordId = restTemplate.getForObject(targetUrl, String.class);
+    //RestTemplate Blocking
 
-    String resultFileName = makeCsv(keywordId, detectDto.getUserId(), detectDto.getKeyword());
+    try{
+      String keywordId = restTemplate.getForObject(targetUrl, String.class);
+      String resultFileName = makeCsv(keywordId, detectDto.getUserId(), detectDto.getKeyword());
 
-    sendEmail(detectDto, resultFileName);
-
+      sendEmail(detectDto, resultFileName, successText);
+    }catch (HttpClientErrorException e){//4xx
+      sendErrorEmail(detectDto, errorText);
+    }catch(HttpServerErrorException e){//5xx
+      sendErrorEmail(detectDto, errorText);
+    }
   }
 
-  public void sendEmail(DetectDto detectDto, String fileName) throws MessagingException, UnsupportedEncodingException {
+  @Async(value = "taskExecutor")
+  public void test(DetectDto detectDto) throws InterruptedException {
+
+    String s = "hi";
+    s.contains("hi");
+
+    log.info("test Start");
+    log.info("Thread {}", Thread.currentThread().getName());
+    log.info("Sleep");
+    Thread.sleep(50000);
+    log.info("Sleep End");
+  }
+
+  public void sendEmail(DetectDto detectDto, String fileName, String text) throws MessagingException, UnsupportedEncodingException {
 
     MimeMessage message = javaMailSender.createMimeMessage();
     MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
 
     messageHelper.setFrom(FROM_ADDRESS);
-//    messageHelper.setTo(detectDto.getEmail());
     messageHelper.setTo(detectDto.getEmail());
     messageHelper.setSubject(subject);
     messageHelper.setText(text);
@@ -119,6 +144,18 @@ public class DetectService {
 
     javaMailSender.send(message);
 
+  }
+
+  public void sendErrorEmail(DetectDto detectDto, String text) throws MessagingException {
+    MimeMessage message = javaMailSender.createMimeMessage();
+    MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+
+    messageHelper.setFrom(FROM_ADDRESS);
+    messageHelper.setTo(detectDto.getEmail());
+    messageHelper.setSubject(subject);
+    messageHelper.setText(text);
+
+    javaMailSender.send(message);
   }
 
   public String makeCsv(String keywordId, String userEmail, String keyword) throws IOException {

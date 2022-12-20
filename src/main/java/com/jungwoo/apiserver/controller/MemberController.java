@@ -30,11 +30,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -79,6 +81,7 @@ public class MemberController {
     String token = jwtAuthenticationProvider.createToken(member.getLoginId());
     Date date = jwtAuthenticationProvider.getTokenExpired(token);
 
+
     return ResponseEntity.ok().body(new CommonResponse<>(TokenResponse.builder().
         accessToken(token).
         tokenExpired(date).
@@ -106,6 +109,8 @@ public class MemberController {
   @ApiOperation(value = "로그아웃")
   @PostMapping("/logout")
   public ResponseEntity<? extends BasicResponse> logout() {
+
+    log.info("로그아웃 성공");
 
     return ResponseEntity.ok().body(new CommonResponse<>("로그아웃에 성공했습니다."));
   }
@@ -184,9 +189,9 @@ public class MemberController {
   @GetMapping("/members")
   public Page<MemberPageDto> listMember(@PageableDefault(size = 30, sort = "id", direction = Sort.Direction.ASC) Pageable pageable, HttpServletRequest request) {
 
-      memberService.isAdmin(request);
+//      memberService.isAdmin(request);
 
-      return memberService.findPageSort(pageable);
+    return memberService.findPageSort(pageable);
 
   }
 

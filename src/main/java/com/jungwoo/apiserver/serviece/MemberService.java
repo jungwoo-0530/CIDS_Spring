@@ -5,7 +5,7 @@ import com.jungwoo.apiserver.dto.maria.member.MemberCreateDto;
 import com.jungwoo.apiserver.dto.maria.member.MemberPageDto;
 import com.jungwoo.apiserver.dto.maria.member.MemberUpdateDto;
 import com.jungwoo.apiserver.exception.CustomException;
-import com.jungwoo.apiserver.exception.MemberErrorCode;
+import com.jungwoo.apiserver.exception.errorcode.MemberErrorCode;
 import com.jungwoo.apiserver.repository.maria.MemberRepository;
 import com.jungwoo.apiserver.security.jwt.JwtAuthenticationProvider;
 import lombok.RequiredArgsConstructor;

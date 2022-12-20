@@ -1,5 +1,6 @@
-package com.jungwoo.apiserver.exception;
+package com.jungwoo.apiserver.exception.errorcode;
 
+import com.jungwoo.apiserver.exception.ErrorCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

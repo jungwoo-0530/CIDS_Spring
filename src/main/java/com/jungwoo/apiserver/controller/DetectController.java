@@ -57,11 +57,20 @@ public class DetectController {
 
   @ApiOperation(value = "대쉬보드")
   @GetMapping("/dashboard")
-  public ResponseEntity<? extends BasicResponse> dashboard(){
+  public ResponseEntity<? extends BasicResponse> dashboard() {
 
     DashboardDto dto = detectService.getDashboard();
 
     return ResponseEntity.status(200).body(new CommonResponse<>(dto, "dashboard 완료"));
   }
 
+  @PostMapping("/detectTest")
+  public ResponseEntity<? extends BasicResponse> testSearchService(@RequestBody DetectDto detectDto,
+                                                                   HttpServletRequest request) throws InterruptedException {
+
+    Thread.sleep(10000);
+
+    detectService.test(detectDto);
+    return ResponseEntity.status(200).body(new CommonResponse<>(detectDto, "detect 완료"));
+  }
 }

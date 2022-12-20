@@ -33,7 +33,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
 
   @Override
-  public Page<BoardPageDto> findAllPageSort(String pageType, Pageable pageable) {
+  public Page<BoardPageDto> findAllPageSort(String boardType, Pageable pageable) {
     JPAQuery<BoardPageDto> query = jpaQueryFactory
         .select(Projections.fields(
                 BoardPageDto.class,
@@ -49,7 +49,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
             )
 
         )
-        .where(board.type.eq(pageType), board.available.eq(true))
+        .where(board.type.eq(boardType), board.available.eq(true))
         .from(board)
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize());
@@ -64,7 +64,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     long total = jpaQueryFactory
         .select(board)
         .from(board)
-        .where(board.type.eq(pageType),
+        .where(board.type.eq(boardType),
             board.available.eq(true))
         .fetch().size();
 

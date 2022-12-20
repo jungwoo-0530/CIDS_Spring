@@ -51,8 +51,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .csrf().disable()
         .exceptionHandling()
-        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-        .accessDeniedHandler(jwtAccessDeniedHandler)
+        .authenticationEntryPoint(jwtAuthenticationEntryPoint)//인증 실패
+        .accessDeniedHandler(jwtAccessDeniedHandler)//인가 실패
         .and()
         .authorizeRequests()
         //board
@@ -75,7 +75,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers(HttpMethod.POST, "/login").permitAll()
         .antMatchers(HttpMethod.GET, "/members/me").authenticated()
         .antMatchers(HttpMethod.PUT, "/members/me/update").authenticated()
-        .antMatchers(HttpMethod.GET, "/members").authenticated()
+        .antMatchers(HttpMethod.GET, "/members").hasRole("admin")
         .antMatchers(HttpMethod.GET, "/members/search").hasRole("admin")
         .antMatchers(HttpMethod.PUT, "/members/{memberId}").hasRole("admin")
         .antMatchers(HttpMethod.PUT, "/members/me/password").authenticated()
@@ -85,7 +85,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers(HttpMethod.POST, "/detect").authenticated()
         .antMatchers(HttpMethod.GET, "/dashboard").permitAll()
         .antMatchers(HttpMethod.GET, "/domain/ranking").permitAll()
-
         .and()
         .formLogin().disable()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
