@@ -28,6 +28,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 
@@ -51,9 +52,6 @@ public class BoardController {
   public Page<BoardPageDto> listBoard(@RequestParam(value = "boardType") String boardType,
                                       @PageableDefault(size = 10, sort = "id",
                                           direction = Sort.Direction.DESC) Pageable pageable) {
-    log.info("BoardController getmapping list");
-    log.info("{}", memberService.getClass());
-
 
 
     return boardService.findPageSort(boardType, pageable);
