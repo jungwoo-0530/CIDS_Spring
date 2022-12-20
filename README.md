@@ -8,7 +8,11 @@
 
 
 
+- 참고로 이 프로젝트에는 모든 커밋이 존재하지 않습니다.
+- 배포하기 위해서 프론트엔드, 백엔드같이 있던 프로젝트를 분리했습니다.
+- [이전 프로젝트 링크](https://github.com/jungwoo-0530/SpringBootApiServer)
 
+<img src="img/README/Screenshot of Yoink (2022-12-20 6-16-17 PM).png" alt="Screenshot of Yoink (2022-12-20 6-16-17 PM)" style="zoom:50%;" />
 
 # 목차
 
@@ -97,7 +101,7 @@
 
 ### 페이지 기획서
 
-### 
+
 
 ### API 명세서 Spring Boot
 
