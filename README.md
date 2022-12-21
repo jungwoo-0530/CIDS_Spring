@@ -23,7 +23,7 @@
   - [기능 명세서](#기능-명세서)
   - [API 명세서](#API-명세서)
   - [DB 명세서](#DB-명세서)
-- [FrontEnd & 머신 러닝(Flask)](#FrontEnd머신-러닝Flask) 
+- [FrontEnd(React) & 머신 러닝(Flask)](#FrontEndReact머신-러닝Flask) 
 
 
 
