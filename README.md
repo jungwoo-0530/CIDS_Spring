@@ -17,16 +17,13 @@
 # 목차
 
 - [주요 기능과 로직](#주요-기능과-로직)
-
 - [서비스 구조](#서비스-구조)
 - [기술 스택](#기술-스택)
-- [기획 & 설계](#기획-&-설계)
+- [기획 & 설계](#기획-설계)
   - [개발 명세서](#개발-명세서)
-  - [페이지 기획서](#페이지-기획서)
   - [API 명세서 Spring Boot](#API-명세서-Spring-Boot)
   - [DB 명세서](#DB-명세서)
-
-- [Front & 머신 러닝(Flask)](Front-&-머신-러닝(Flask))
+- [Front & 머신 러닝(Flask)](#Front-머신-러닝Flask) 
 
 
 
@@ -87,7 +84,7 @@
   - MariaDB, MongoDB
   - AWS(EC2, RDS, S3,  Document DB)
 
-## 기획 & 설계
+## 기획&설계
 
 - [요구사항](#요구사항)
 - [기능 명세서](https://github.com/jungwoo-0530/CIDS_Spring/blob/main/docs/기능%20명세서.md)
@@ -167,4 +164,4 @@
 ## Front & 머신 러닝(Flask)
 
 - [FrontEnd](https://github.com/jungwoo-0530/CIDS_Front)
-- [머신 러닝(Flask)](https://github.com/jungwoo-0530/CIDS_LM)
+- [머신 러닝(Flask)](https://github.com/jungwoo-0530/CIDS_ML)
