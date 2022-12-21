@@ -161,7 +161,7 @@
 
 <img src="img/README/Screenshot of IntelliJ IDEA (2022-11-27 1-51-10 AM).png" alt="Screenshot of IntelliJ IDEA (2022-11-27 1-51-10 AM)" style="zoom:50%;" />
 
-## FrontEnd&머신 러닝(Flask)
+## FrontEnd(React)&머신 러닝(Flask)
 
 - [FrontEnd](https://github.com/jungwoo-0530/CIDS_Front)
 - [머신 러닝(Flask)](https://github.com/jungwoo-0530/CIDS_ML)
