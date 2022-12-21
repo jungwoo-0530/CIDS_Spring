@@ -21,7 +21,7 @@
 - [기술 스택](#기술-스택)
 - [기획 & 설계](#기획-설계)
   - [기능 명세서](#기능-명세서)
-  - [API 명세서 Spring Boot](#API-명세서-Spring-Boot)
+  - [API 명세서](#API-명세서)
   - [DB 명세서](#DB-명세서)
 - [FrontEnd & 머신 러닝(Flask)](#FrontEnd머신-러닝Flask) 
 
@@ -88,7 +88,7 @@
 
 - [요구사항](#요구사항)
 - [기능 명세서](https://github.com/jungwoo-0530/CIDS_Spring/blob/main/docs/기능%20명세서.md)
-- [API 명세서 Spring Boot](#API-명세서-Spring-Boot)
+- [API 명세서](#API-명세서)
 - [DB 명세서](#DB-명세서)
 
 ### 요구사항
