@@ -163,5 +163,5 @@
 
 ## FrontEnd(React)&머신 러닝(Flask)
 
-- [FrontEnd](https://github.com/jungwoo-0530/CIDS_Front)
+- [FrontEnd(React)](https://github.com/jungwoo-0530/CIDS_Front)
 - [머신 러닝(Flask)](https://github.com/jungwoo-0530/CIDS_ML)
