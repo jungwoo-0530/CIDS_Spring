@@ -20,10 +20,10 @@
 - [서비스 구조](#서비스-구조)
 - [기술 스택](#기술-스택)
 - [기획 & 설계](#기획-설계)
-  - [개발 명세서](#개발-명세서)
+  - [기능 명세서](#기능-명세서)
   - [API 명세서 Spring Boot](#API-명세서-Spring-Boot)
   - [DB 명세서](#DB-명세서)
-- [Front & 머신 러닝(Flask)](#Front-머신-러닝Flask) 
+- [FrontEnd & 머신 러닝(Flask)](#FrontEnd머신-러닝Flask) 
 
 
 
@@ -161,7 +161,7 @@
 
 <img src="img/README/Screenshot of IntelliJ IDEA (2022-11-27 1-51-10 AM).png" alt="Screenshot of IntelliJ IDEA (2022-11-27 1-51-10 AM)" style="zoom:50%;" />
 
-## Front & 머신 러닝(Flask)
+## FrontEnd&머신 러닝(Flask)
 
 - [FrontEnd](https://github.com/jungwoo-0530/CIDS_Front)
 - [머신 러닝(Flask)](https://github.com/jungwoo-0530/CIDS_ML)
