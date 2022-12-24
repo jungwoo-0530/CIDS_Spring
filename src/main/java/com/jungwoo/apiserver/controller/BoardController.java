@@ -7,17 +7,13 @@ import com.jungwoo.apiserver.dto.maria.board.BoardCreateDto;
 import com.jungwoo.apiserver.dto.maria.board.BoardPageDto;
 import com.jungwoo.apiserver.dto.maria.board.BoardSearchCondition;
 import com.jungwoo.apiserver.dto.maria.board.BoardUpdateDto;
-import com.jungwoo.apiserver.serviece.ImageService;
 import com.jungwoo.apiserver.serviece.MemberService;
 import com.jungwoo.apiserver.serviece.BoardService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +24,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 
