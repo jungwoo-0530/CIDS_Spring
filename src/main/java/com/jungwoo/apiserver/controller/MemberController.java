@@ -154,7 +154,7 @@ public class MemberController {
 
 
   @ApiOperation(value = "회원 마이페이지 수정(업데이트)")
-  @PutMapping("/members/me/update")
+  @PutMapping("/members/me")
   public ResponseEntity<? extends BasicResponse> updateMe(@Validated(value = ValidationSequence.class) @RequestBody MemberUpdateDto memberUpdateDto, HttpServletRequest request) {
 
     //OSIV 영속성 컨텍스트. 더티체크.
@@ -190,6 +190,7 @@ public class MemberController {
   public Page<MemberPageDto> listMember(@PageableDefault(size = 30, sort = "id", direction = Sort.Direction.ASC) Pageable pageable, HttpServletRequest request) {
 
 //      memberService.isAdmin(request);
+    log.info("listMember");
 
     return memberService.findPageSort(pageable);
 

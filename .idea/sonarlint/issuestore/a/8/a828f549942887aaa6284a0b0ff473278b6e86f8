@@ -1,0 +1,27 @@
+
+a	java:S101b"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(˜àÀ}
+h	java:S101±"MRename this class name to match the regular expression '^[A-Z][a-zA-Z0-9]*$'.(š…å×ùÿÿÿÿ
+i
+java:S2259ß"MA "NullPointerException" could be thrown; "getContentType()" can return null.(‰¤‰åüÿÿÿÿ
+i
+java:S2259ß"MA "NullPointerException" could be thrown; "getContentType()" can return null.(‰¤‰åüÿÿÿÿ
+_
+java:S2259ß"CA "NullPointerException" could be thrown; "mFile" is nullable here.(‰¤‰åüÿÿÿÿ
+<
+java:S1452?"&Remove usage of generic wildcard type.(ÜûÔ‹
+;
+java:S1452I"&Remove usage of generic wildcard type.(¿¬Ü
+A
+java:S1452l"&Remove usage of generic wildcard type.(üê´Àûÿÿÿÿ
+A
+java:S1452v"&Remove usage of generic wildcard type.(õáªÀüÿÿÿÿ
+B
+java:S1452ˆ"&Remove usage of generic wildcard type.(ñ¸ÛÍþÿÿÿÿ
+B
+java:S1452™"&Remove usage of generic wildcard type.(Ì­íÅùÿÿÿÿ
+B
+java:S1452¦"&Remove usage of generic wildcard type.(…”¡Çüÿÿÿÿ
+=
+java:S1452Ï"&Remove usage of generic wildcard type.(ÃéÅ™
+I
+java:S1452Ù"&Remove usage of generic wildcard type.(²¾Þ¾üÿÿÿÿ8¶ûË¤Ì0

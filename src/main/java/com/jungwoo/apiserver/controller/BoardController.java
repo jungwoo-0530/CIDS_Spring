@@ -61,7 +61,6 @@ public class BoardController {
   @GetMapping("/boards/{boardId}")
   public ResponseEntity<? extends BasicResponse> readBoard(@PathVariable(name = "boardId") Long boardId,
                                                            HttpServletRequest request) {
-    log.info("BoardController readBoard");
 
     Board board = boardService.getBoardAndAddHit(boardId);
 
